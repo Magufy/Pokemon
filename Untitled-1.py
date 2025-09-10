@@ -59,7 +59,7 @@ class Degats:
             Type=1
         
         T=int(self.poke_att.vitesse/2)
-        if self.attaque.haut_critique==True:
+        if self.attaque.haut_crit==True:
             T=T*8
         if T>255:
             T=255
@@ -357,6 +357,7 @@ MiteDeFer  = Pokemon(
 110,
 ["Strido-Son","Boutefeu","Toxik","Mur Lumière"]
 )
+
 
 
 
