@@ -47,7 +47,7 @@ class Degats:
 
         STAB=1.5 if self.attaque.type in self.poke_att.type else 1
         
-        if self.attaque.type in self.poke_def.fab2:
+        if self.attaque.type in self.poke_def.faib2:
             Type=4
         elif self.attaque.type in self.poke_def.faib:
             Type=2 
@@ -357,6 +357,7 @@ MiteDeFer  = Pokemon(
 110,
 ["Strido-Son","Boutefeu","Toxik","Mur Lumière"]
 )
+
 
 
 
