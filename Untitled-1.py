@@ -1,7 +1,7 @@
-from random import *
+import random
 
 class Pokemon():
-    def __init__(self,nom,type,pv,vitesse,res,res2,faib,faib2,attaque,defense,attspe,defspe,comp,immu):
+    def __init__(self,nom,type,pv,vitesse,res,res2,faib,faib2,immu,attaque,defense,attspe,defspe,comp):
         self.nom = nom
         self.type = type
         self.pv = pv
@@ -31,7 +31,7 @@ class Attaque():
         self.statut=statut
         self.special=special
         self.haut_crit=haut_crit
-
+        self.puissance=puissance
 
 
 class Degats:
@@ -41,8 +41,14 @@ class Degats:
         self.attaque=attaque
 
     def degats(self):#rajouter les priorités
-        Att=poke_att.attaque if self.attaque.special == False else poke_att.attspe
-        Def=poke_def.defense if self.attaque.special == False else poke_def.defspe
+
+        if self.attaque.puissance == 0:
+            return 0
+        if self.attaque.type in self.poke_def.immu:
+            return 0
+        
+        Att = self.poke_att.attaque if self.attaque.special == False else self.poke_att.attspe
+        Def = self.poke_def.defense if self.attaque.special == False else self.poke_def.defspe
         Pui=self.attaque.puissance
 
         STAB=1.5 if self.attaque.type in self.poke_att.type else 1
@@ -72,13 +78,34 @@ class Degats:
         Obj=1  #pass
 
         CM= STAB * Type * Crit * Obj * random.uniform(0.85,1)
+        Compensateur_Niveaux = 8
+        Degats=((((Att*Pui)/Def)/50)+2)*CM*Compensateur_Niveaux
+        return int(Degats)
 
-        Degats=((((Att*Pui)/Def)/50)+2)*CM
-        print(Degats)
 
+Habarenage = Attaque("Plante", None, False, False, 90)
+LanceFlamme = Attaque("Feu", None, True, False, 90)
+Surchauffe = Attaque("Feu", None, True, False, 130)
+CanonGraine = Attaque("Plante", None, False, False, 80)
 
+Blizzard = Attaque("Glace", None, True, False, 110)
+Stalactite = Attaque("Glace", None, False, False, 25)
+DansePluie = Attaque("Eau", "Statut", True, False, 0)
+Destruction = Attaque("Normal", None, False, False, 250)
 
-Habarenage=Attaque("Plante",None,False,False,1)
+BueeNoire = Attaque("Glace", "Statut", True, False, 0)
+Acidarmure = Attaque("Poison", "Statut", True, False, 0)
+Ouragan = Attaque("Vol", None, True, False, 40)
+DracoMeteore = Attaque("Dragon", None, True, False, 130)
+
+Psyko = Attaque("Psy", None, True, False, 90)
+Machination = Attaque("Ténèbres", "Statut", True, False, 0)
+DissonancePsy = Attaque("Psy", None, True, False, 80)
+Gravite = Attaque("Psy", "Statut", True, False, 0)
+
+Elecanon = Attaque("Electrique", None, True, False, 120)
+Telluriforce = Attaque("Sol", None, True, False, 90)
+MagnetControle = Attaque("Electrique", "Statut", True, False, 0)
 
 Scorvilain = Pokemon(
 "Scovilain",
@@ -86,7 +113,7 @@ Scorvilain = Pokemon(
 65,
 75,
 ("Acier","Electrique","Fée"),
-("Plante"),
+("Plante",),
 (),
 ("Poison","Roche","Vol"),
 (),
@@ -94,17 +121,17 @@ Scorvilain = Pokemon(
 65,
 108,
 65,
-[Habarenage,"Lance-flamme","Surchauffe","Canon-Graine"]
+[Habarenage,LanceFlamme,Surchauffe,CanonGraine]
 )
 
 
 
 Sorbouboul = Pokemon(
 "Sorbouboul",
-("Glace"),
+("Glace",),
 71,
 79,
-("Glace"),
+("Glace",),
 (),
 (),
 ("Feu","Combat","Vol","Acier"),
@@ -113,12 +140,8 @@ Sorbouboul = Pokemon(
 85,
 110,
 95,
-["Blizzard","Stalactite","Danse Pluie","Destruction"]
+[Blizzard,Stalactite,DansePluie,Destruction]
 )
-
-Test=Degats(Scorvilain,Sorbouboul,Habarenage)
-Test.degats
-
 
 Kravarech = Pokemon(
 "Kravarech",
@@ -126,7 +149,7 @@ Kravarech = Pokemon(
 65,
 44,
 ("Feu","Eau","Electrique","Combat","Poison","Insecte"),
-("Plante"),
+("Plante",),
 (),
 ("Sol","Glace","Psy","Dragon"),
 (),
@@ -134,7 +157,7 @@ Kravarech = Pokemon(
 90,
 97,
 123,
-["Buée Noire","Acidarmure","Ouragan","Draco-Météore"]
+[BueeNoire,Acidarmure,Ouragan,DracoMeteore]
 )
 
 Farigiraf  = Pokemon(
@@ -142,16 +165,16 @@ Farigiraf  = Pokemon(
 ("Psy","Normal"),
 120,
 60,
-("Psy"),
+("Psy",),
 (),
-("Spectre"),
+("Spectre",),
 ("Ténèbres","Psy"),
 (),
 90,
 70,
 110,
 70,
-["Psyko","Machination","Dissonance Psy","Gravité"]
+[Psyko,Machination,DissonancePsy,Gravite]
 )
 
 PelageSablé  = Pokemon(
@@ -161,16 +184,23 @@ PelageSablé  = Pokemon(
 101,
 ("Poison","Vol","Roche","Acier"),
 (),
-("Electrique"),
+("Electrique",),
 ("Plante","Eau","Glace","Sol"),
 (),
 81,
 97,
 121,
 85,
-["Élecanon","Telluriforce","Gravité","Magné-Contrôle"]
+[Elecanon,Telluriforce,Gravite,MagnetControle]
 )
 
+Test = Degats(Scorvilain, Sorbouboul, Habarenage)
+print(Test.degats())
+
+
+
+
+"""
 Galvagon  = Pokemon(
 "Galvagon",
 ("Dragon","Electrique"),
@@ -228,7 +258,7 @@ Pomdorochi  = Pokemon(
 106,
 44,
 ("Sol"),
-("Plante","Eau",'Elecrtique'),
+("Plante","Eau",'Electrique'),
 (),
 ("Poison","Vol","Insecte","Dragon","Fée"),
 ("Glace"),
@@ -265,7 +295,7 @@ Amovénus  = Pokemon(
 ("Insecte","Combat"),
 ("Combat","Sol"),
 ("Electrique","Glace","Poison","Roche","Acier"),
-(""),
+(),
 115,
 70,
 135,
@@ -358,11 +388,5 @@ MiteDeFer  = Pokemon(
 ["Strido-Son","Boutefeu","Toxik","Mur Lumière"]
 )
 
-
-
-
-
-
-
-
+"""
 
