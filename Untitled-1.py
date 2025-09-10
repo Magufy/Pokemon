@@ -207,17 +207,102 @@ Amovénus  = Pokemon(
 "Amovénus",
 ("Fée","Vol"),
 74 ,
+106,
+("Plante","Ténèbres"),
+("Insecte","Combat"),
+("Combat","Sol"),
+("Electrique","Glace","Poison","Roche","Acier"),
+(""),
+115,
+70,
+135,
 80,
-("Plante","Eau","Electrique","Combat","Sol","Psy"),
+["Câlinerie","Voix Envoûtante","Explo-Brume","Voix Enjôleuse"]
+)
+
+Pondralugon  = Pokemon(
+"Pondralugon",
+("Acier","Dragon"),
+90 ,
+85,
+("Normal","Acier","Eau","Electrique","Vol","Psy","Insecte","Roche"),
+("Plante"),
+("Poison"),
+("Combat","Sol"),
+(""),
+105,
+130,
+125,
+65,
+["Ultralaser","Luminocanon","Mur de Fer","Puissance"]
+)
+
+Saquedeneu  = Pokemon(
+"Saquedeneu",
+("Plante"),
+65,
+60,
+("Plante","Eau","Electrique","Sol"),
 (),
 (),
-("Ténèbres","Spectre","Feu","Vol","Glace","Poison"),
-("Insecte"),
+("Feu","Glace","Poison","Vol","Insecte"),
+(),
+55,
+115,
+100,
+40,
+["Ultralaser","	Nœud Herbe","Blabla Dodo","Bombe Beurk"]
+)
+
+Chartor  = Pokemon(
+"Chartor",
+("Feu"),
+70,
+20,
+("Plante","Feu","Glace","Insecte","Acier","Fée"),
+(),
+(),
+("Eau","Sol","Roche"),
+(),
+85,
+140,
+85,
+70,
+["Abîme","Surpuissance","Coud'Krâne","Tacle Feu"]
+)
+
+Pierroteknik  = Pokemon(
+"Pierroteknik",
+("Feu","Spectre"),
+53,
+107,
+("Plante","Feu","Glace","Poison","Acier","Fée"),
+(),
+("Normal","Combat"),
+("Eau","Sol","Roche","Spectre","Ténebres"),
+(),
+127,
+53,
+151,
+79,
+["Surchauffe","Dernier Recours","Vaste Pouvoir","Zénith"]
+)
+
+MiteDeFer  = Pokemon(
+"Mite-de-Fer",
+("Feu","Poison"),
 80,
-80,
-80,
-80,
-["Psykoud'Boul","Interversion","Force Ajoutée","Tempête Verte"]
+110,
+("Plante","Feu","Glace","Poison","Acier","Fée"),
+(),
+("Normal","Combat"),
+("Eau","Sol","Roche","Spectre","Ténebres"),
+(),
+70,
+60,
+140,
+110,
+["Strido-Son","Boutefeu","Toxik","Mur Lumière"]
 )
 
 
