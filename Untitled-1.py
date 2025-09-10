@@ -1,7 +1,7 @@
 from random import *
 
 class Pokemon():
-    def __init__(self,nom,type,pv,vitesse,res,res2,faib,faib2,attaque,defense,attspé,defspé,comp,immu):
+    def __init__(self,nom,type,pv,vitesse,res,res2,faib,faib2,attaque,defense,attspe,defspe,comp,immu):
         self.nom = nom
         self.type = type
         self.pv = pv
@@ -13,8 +13,8 @@ class Pokemon():
         self.faib2 = faib2     
         self.attaque = attaque
         self.defense = defense
-        self.attspé = attspé
-        self.defspé = defspé
+        self.attspe = attspe
+        self.defspe = defspe
         self.comp = comp
     def __str__(self):
         return (f"Pokémon: {self.nom}\n"
@@ -22,7 +22,7 @@ class Pokemon():
                 f"PV: {self.pv}\n"
                 f"Vitesse: {self.vitesse}\n"
                 f"Attaque: {self.attaque} | Défense: {self.defense}\n"
-                f"Attaque Spéciale: {self.attspé} | Défense Spéciale: {self.defspé}\n"
+                f"Attaque Spéciale: {self.attspe} | Défense Spéciale: {self.defspe}\n"
                 f"Compétences: {', '.join([c.nom for c in self.comp])}")
 
 class Attaque():
@@ -357,6 +357,7 @@ MiteDeFer  = Pokemon(
 110,
 ["Strido-Son","Boutefeu","Toxik","Mur Lumière"]
 )
+
 
 
 
