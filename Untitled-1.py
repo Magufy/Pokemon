@@ -71,7 +71,7 @@ class Degats:
         
         Obj=1  #pass
 
-        CM= STAB * Type * Crit * Obj * random(0.85,1)
+        CM= STAB * Type * Crit * Obj * random.uniform(0.85,1)
 
         Degats=((((Att*Pui)/Def)/50)+2)*CM
         print(Degats)
@@ -357,6 +357,7 @@ MiteDeFer  = Pokemon(
 110,
 ["Strido-Son","Boutefeu","Toxik","Mur Lumière"]
 )
+
 
 
 
