@@ -1,3 +1,5 @@
+from random import *
+
 class Pokemon():
     def __init__(self,nom,type,pv,vitesse,res,res2,faib,faib2,attaque,defense,attspé,defspé,comp,immu):
         self.nom = nom
@@ -22,17 +24,47 @@ class Pokemon():
                 f"Attaque: {self.attaque} | Défense: {self.defense}\n"
                 f"Attaque Spéciale: {self.attspé} | Défense Spéciale: {self.defspé}\n"
                 f"Compétences: {', '.join([c.nom for c in self.comp])}")
-    class Degats():
-        def __init__(self,nom,degats,type,precision,caté):
-           self.nom = nom
-           self.degats = degats
-           self.type = type
-           self.degats = precision
-           self.caté = caté
 
-        def __str__(self):
-            return f"{self.nom} ({self.type}) - Puissance: {self.puissance}, Précision: {self.precision}%, Catégorie: {self.categorie}"
+class Attaque():
+    def __init__(self,type,statut,special,haut_crit,puissance):
+        self.type=type
+        self.statut=statut
+        self.special=special
+        self.crit=crit
+        self.haut_crit=haut_crit
+
+
+
+class Degats:
+    def __init__(self,poke_att,poke_def,attaque):
+        self.poke_att=poke_att
+        self.poke_def=poke_def
+        self.attaque=attaque
+
+    def degats(self):
+        Att=poke_att.attaque if self.attaque.special == False, else poke_att.attspe
+        Def=poke_def.defense if self.attaque.special == False, else poke_def.defspe
+        Pui=self.attaque.puissance
+
+        STAB=1.5 if self.attaque.type in self.poke_att.type else 0
         
+        Type=4 if self.attaque.type in self.poke_def.fab2 elif self.attaque.type in self.poke_def.faib 2 alif self.attaque.type in self.poke_def.res 0.5 elif self.attaque.type in self.poke_def.res2 0.25 else 0
+        
+        T=int(self.poke_att.vitesse/2)
+        T=T*8 if self.attaque.haut_crit==True
+        T=255 if T>255
+        Crit= 1.4 if random.randint(0,255)<T else 1
+        
+        Obj=1  #pass
+
+        CM= STAB * Type * Crit * Obj * random(0.85,1)
+
+        Degats=((((Att*Pui)/Def)/50)+2)*CM
+
+
+
+
+
 Scorvilain = Pokemon(
 "Scovilain",
 ("Feu","Plante"),
@@ -304,8 +336,6 @@ MiteDeFer  = Pokemon(
 110,
 ["Strido-Son","Boutefeu","Toxik","Mur Lumière"]
 )
-
-
 
 
 
