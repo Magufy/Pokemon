@@ -16,6 +16,9 @@ class Pokemon():
         self.attspe = attspe
         self.defspe = defspe
         self.comp = comp
+        self.statut_actif=None
+        self.cant_attack=False
+
     def __str__(self):
         return (f"Pokémon: {self.nom}\n"
                 f"Type(s): {self.type}, {self.faib} (Faiblesses), {self.res} (Résistances)\n"
@@ -25,13 +28,41 @@ class Pokemon():
                 f"Attaque Spéciale: {self.attspe} | Défense Spéciale: {self.defspe}\n"
                 f"Compétences: {', '.join([c.nom for c in self.comp])}")
 
+    def apply_statut(self):
+        if self.statut=="Poison":
+            pass
+        if self.statut == "Burn":
+            pass
+        if self.statut == "Gel":
+            if self.cant_attack == True :
+                random.randint(0,100)
+                if random.randint > 80 :
+                    self.cant_attack = False
+            else :
+                self.cant_attack = True
+        if self.statut == "Comptine":
+            if self.cant_attack == True :
+                random.randint(0,100)
+                if random.randint > 80 :
+                    self.cant_attack = False
+            else :
+                self.cant_attack = True
+        
+
+
+
+
 class Attaque():
-    def __init__(self,type,statut,special,haut_crit,puissance):
+    def __init__(self,type,statut,special,haut_crit,puissance,proba,precision,prio,PP):
         self.type=type
         self.statut=statut
         self.special=special
         self.haut_crit=haut_crit
         self.puissance=puissance
+        self.proba=proba
+        self.precision=precision
+        self.prio=prio
+        self.PP=PP
 
 
 class Degats:
@@ -41,7 +72,11 @@ class Degats:
         self.attaque=attaque
 
     def degats(self):#rajouter les priorités
-
+        vitesse=self.poke_att.vitesse
+        if self.poke_att.statut=="Paralysie":
+            vitesse=vitesse/4
+            if random.randint(0,100)<=25:
+                return("Raté  (paralysie)")
         if self.attaque.puissance == 0:
             return 0
         if self.attaque.type in self.poke_def.immu:
@@ -64,7 +99,7 @@ class Degats:
         else :
             Type=1
         
-        T=int(self.poke_att.vitesse/2)
+        T=int(vitesse/2)
         if self.attaque.haut_crit==True:
             T=T*8
         if T>255:
@@ -77,12 +112,28 @@ class Degats:
         
         Obj=1  #pass
 
-        CM= STAB * Type * Crit * Obj * random.uniform(0.85,1)
+        CM = STAB * Type * Crit * Obj * random.uniform(0.85,1) # + mod de terrain
         Compensateur_Niveaux = 8
         Degats=((((Att*Pui)/Def)/50)+2)*CM*Compensateur_Niveaux
+        #Sleep,Paralysie
+        #Terrain : pluie,champelek ptet, ptet soleil aussi
+        #Vol de Vie,Protection
+        #Attaques qui buff
+        #remove uminity(gravité)
+        #Les pokemon perdent de la vie en attaquant ( malediction , destruction,une autre)
+        #PP
+        
+        if self.attaque.statut != False:
+            if self.attaque.statut in ("Poison","Burn","Gel","Confusion","Paralysie","Comptine") :
+                if random.randint(1,100) <= self.attaque.proba:
+                    self.poke_def.statut = self.attaque.statut
+
+
+            
+
         return int(Degats)
 
-
+# ajouter : proba,precision,prio,PP
 Habarenage = Attaque("Plante", None, False, False, 90)
 LanceFlamme = Attaque("Feu", None, True, False, 90)
 Surchauffe = Attaque("Feu", None, True, False, 130)
@@ -106,6 +157,8 @@ Gravite = Attaque("Psy", "Statut", True, False, 0)
 Elecanon = Attaque("Electrique", None, True, False, 120)
 Telluriforce = Attaque("Sol", None, True, False, 90)
 MagnetControle = Attaque("Electrique", "Statut", True, False, 0)
+
+Toxic=Attaque("Poison","Poison",False,False,0,100,100,False,16)
 
 Scorvilain = Pokemon(
 "Scovilain",
@@ -389,4 +442,3 @@ MiteDeFer  = Pokemon(
 )
 
 """
-
