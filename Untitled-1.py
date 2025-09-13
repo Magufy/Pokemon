@@ -1,4 +1,5 @@
 import random
+from random import choice
 
 class Pokemon():
     def __init__(self,nom,type,pv,vitesse,res,res2,faib,faib2,immu,attaque,defense,attspe,defspe,comp):
@@ -16,8 +17,8 @@ class Pokemon():
         self.attspe = attspe
         self.defspe = defspe
         self.comp = comp
-        self.statut_actif=None
-        self.cant_attack=False
+        self.statut = []
+        self.cant_attack = False
 
     def __str__(self):
         return (f"Pokémon: {self.nom}\n"
@@ -29,31 +30,44 @@ class Pokemon():
                 f"Compétences: {', '.join([c.nom for c in self.comp])}")
 
     def apply_statut(self):
-        if self.statut=="Poison":
+        if "Poison" in self.statut :
             pass
-        if self.statut == "Burn":
+        if "Burn" in self.statut :
             pass
-        if self.statut == "Gel":
+        if "Comptine" in self.statut :
             if self.cant_attack == True :
                 random.randint(0,100)
                 if random.randint > 80 :
-                    self.cant_attack = False
+                    self.statut.remove("Comptine")
             else :
                 self.cant_attack = True
-        if self.statut == "Comptine":
+        if "Gel" in self.statut :
             if self.cant_attack == True :
                 random.randint(0,100)
                 if random.randint > 80 :
-                    self.cant_attack = False
+                    self.statut.remove("Gel")
             else :
                 self.cant_attack = True
+        if "MG" in self.statut :
+            self.defense = self.defense*1.25
+            self.defspe = self.defspe*1.25
+            self.statut.remove("MG")
+        if "Habanerage" in self.statut :
+            self.attaque = self.attaque*2
+            self.defense = self.defense/2
+            self.statut.remove("Habanerage")
+        if "Acidarmure" in self.statut :
+            self.defense = self.defense*1.5
+            self.statut.remove("Acidarmure")
+        if "Machination" in self.statut :
+            self.attspe = self.attspe*2
+            self.statut.remove("Machination")
+
         
 
-
-
-
 class Attaque():
-    def __init__(self,type,statut,special,haut_crit,puissance,proba,precision,prio,PP):
+    def __init__(self,nom,type,statut,special,haut_crit,puissance,proba,precision,prio,PP):
+        self.nom=nom
         self.type=type
         self.statut=statut
         self.special=special
@@ -63,7 +77,6 @@ class Attaque():
         self.precision=precision
         self.prio=prio
         self.PP=PP
-
 
 class Degats:
     def __init__(self,poke_att,poke_def,attaque):
@@ -116,7 +129,7 @@ class Degats:
         Compensateur_Niveaux = 8
         Degats=((((Att*Pui)/Def)/50)+2)*CM*Compensateur_Niveaux
         #Sleep,Paralysie
-        #Terrain : pluie,champelek ptet, ptet soleil aussi
+        #Terrain : pluie,gravité,champelek ptet
         #Vol de Vie,Protection
         #Attaques qui buff
         #remove uminity(gravité)
@@ -124,41 +137,137 @@ class Degats:
         #PP
         
         if self.attaque.statut != False:
-            if self.attaque.statut in ("Poison","Burn","Gel","Confusion","Paralysie","Comptine") :
+            if self.attaque.statut in ("Poison","Burn","Gel","Confusion","Paralysie","Comptine","MG","Habanerage","Acidarmure","Machination") :
                 if random.randint(1,100) <= self.attaque.proba:
-                    self.poke_def.statut = self.attaque.statut
+                    self.poke_def.statut.append(self.attaque.statut)
 
 
             
 
         return int(Degats)
 
+class Bot:
+    def __init__(self,pokemons_dispo):
+        self.equipe_bot=[]
+        for i in range (6) :
+            self.equipe_bot.append(choice(pokemons_dispo))
+        self.poke_front_bot=choice(self.equipe_bot)
+        self.equipe_bot.remove(self.poke_front_bot)
+
+    def choix_pokemon_bot(self):
+        self.poke_front_bot=choice(self.equipe_bot)
+        self.equipe_bot.remove(self.poke_front_bot)
+
+class Battle:
+    def __init__(self,pokemons_dispo):
+        self.equipe=[]
+        self.poke_front=None
+        self.robot= Bot(pokemons_dispo)
+
+    def cree_equipe(self,pokemons_dispo):
+        while len(self.equipe)<6:
+            poke_num=int(input(f"choisissez le numero de votre pokemon votre pokemon {[i.nom for i in pokemons_dispo]}"))
+            if poke_num in range (1,len(pokemons_dispo)+1):
+                self.equipe.append(pokemons_dispo[poke_num-1])
+                print('pokemon ajouté')
+            else:
+                print('pokemon non disponible')
+            
+    def choix_pokemon(self):
+        while self.poke_front==None:
+            poke=int(input(f"choisissez un pokemon a envoyer au combat{[i.nom for i in self.equipe]}"))
+            if poke in range (1,len(self.equipe)+1):
+                self.poke_front=self.equipe[poke-1]
+                self.equipe.remove(self.equipe[poke-1])
+
+    def mort_poke_front(self):
+        if self.poke_front.pv<=0 : 
+            self.poke_front=None
+            self.choix_pokemon()
+
+    def tour(self):
+        self.mort_poke_front()
+
+        action=None
+        while action == None:
+            action=int(input("choisissez une action : 1)  Attaquer , 2) Objet , 3) Changer , 4) Capituler"))
+                
+            if action == 2 :
+                pass
+                
+            if action == 1 :
+                attaque=None
+                while attaque==None :
+                    attaque=input(f"choisissez une attaque : 1) {self.poke_front.comp[1].name}  2) {self.poke_front.comp[2].name}  3) {self.poke_front.comp[3].name}  4) {self.poke_front.comp[4].name}")
+                    if attaque in range (1,len(self.poke_front.comp)+1):
+                        Degats.degats(self.poke_front,self.bot.poke_front_bot,self.poke_front.comp[attaque-1])
+                    else:
+                        attaque=None
+
+            elif action == 3 :
+                poke_change=None
+                while poke_change==None :
+                    poke_change=input(f"choisissez un pokemon : {self.equipe}")
+                    if poke_change in self.equipe:
+                        self.equipe.append(self.poke_front)
+                        self.poke_front=poke_change
+                        self.equipe.remove(poke_change)
+                    else:
+                        poke_change=None
+
+            elif action == 4 :
+                global running
+                running==False
+            
+            else:
+                action=None
+
+            #bot joue
+            if self.robot.poke_front_bot.pv<=0:
+                self.robot.choix_pokemon_bot
+            Degats(self.poke_front, self.robot.poke_front_bot, attaque).degats()
+
+
+    def main(self):
+        if self.equipe==[] and self.poke_front==None :
+            print("Vous avez perdu (la honte)")
+            return
+        elif self.robot.equipe_bot==[] and self.robot.poke_front_bot==None :
+            print("Bravo, vous avez gagnez (heureusement, c'est un bot)")
+            return
+        else :
+            self.tour()
+
+
+
+
+
 # ajouter : proba,precision,prio,PP
-Habarenage = Attaque("Plante", None, False, False, 90)
-LanceFlamme = Attaque("Feu", None, True, False, 90)
-Surchauffe = Attaque("Feu", None, True, False, 130)
-CanonGraine = Attaque("Plante", None, False, False, 80)
 
-Blizzard = Attaque("Glace", None, True, False, 110)
-Stalactite = Attaque("Glace", None, False, False, 25)
-DansePluie = Attaque("Eau", "Statut", True, False, 0)
-Destruction = Attaque("Normal", None, False, False, 250)
+Habanerage = Attaque("Habanerage","Plante","Habanerage", False, False, 0, 100, 100, False, 24)
+LanceFlamme = Attaque("LanceFlamme","Feu", None, True, False, 90, 100, 100, False, 24)
+Surchauffe = Attaque("Surchauffe","Feu", None, True, False, 130, 100, 90, False, 5)
+CanonGraine = Attaque("CanonGraine","Plante", None, False, False, 80, 100, 100, False, 24)
 
-BueeNoire = Attaque("Glace", "Statut", True, False, 0)
-Acidarmure = Attaque("Poison", "Statut", True, False, 0)
-Ouragan = Attaque("Vol", None, True, False, 40)
-DracoMeteore = Attaque("Dragon", None, True, False, 130)
+Blizzard = Attaque("Blizzard","Glace", None, True, False, 110, 100, 70, False, 5)
+Stalactite = Attaque("Stalactite","Glace", None, False, False, 25, 100, 100, False, 30)
+DansePluie = Attaque("DansePluie","Eau", "Pluie", True, False, 0, 100, 100, False, 5)
+Destruction = Attaque("Destruction","Normal", None, False, False, 200, 100, 100, False, 5)
 
-Psyko = Attaque("Psy", None, True, False, 90)
-Machination = Attaque("Ténèbres", "Statut", True, False, 0)
-DissonancePsy = Attaque("Psy", None, True, False, 80)
-Gravite = Attaque("Psy", "Statut", True, False, 0)
+Toxic=Attaque("Toxic","Poison","Poison", False, False, 0, 100, 100, False, 16)
+Acidarmure = Attaque("Acidarmure","Poison", "Acidarmure", True, False, 0, 100, 100, False, 20)
+Ouragan = Attaque("Ouragan","Vol", None, True, False, 40, 100, 100, False, 20)
+DracoMeteore = Attaque("DracoMeteore","Dragon", None, True, False, 130, 100, 90, False, 5)
 
-Elecanon = Attaque("Electrique", None, True, False, 120)
-Telluriforce = Attaque("Sol", None, True, False, 90)
-MagnetControle = Attaque("Electrique", "Statut", True, False, 0)
+Psyko = Attaque("Psyko","Psy", None, True, False, 90, 100, 100, False, 10)
+Machination = Attaque("Machination","Ténèbres", "Machination", True, False, 0, 100, 100, False, 20)
+DissonancePsy = Attaque("DissonancePsy","Psy", None, True, False, 75, 100, 100, False, 10)
+Gravite = Attaque("Gravite","Psy", "Statut", True, False, 0, 100, 100, False, 5)
 
-Toxic=Attaque("Poison","Poison",False,False,0,100,100,False,16)
+Elecanon = Attaque("Elecanon","Electrique", None, True, False, 120, 100, 50, False, 20)
+Telluriforce = Attaque("Telluriforce","Sol", None, True, False, 90, 100, 100, False, 20)
+MagnetControle = Attaque("MagnetControle","Electrique", "MG", True, False, 0, 100, 100, False, 20)
+
 
 Scorvilain = Pokemon(
 "Scovilain",
@@ -174,7 +283,7 @@ Scorvilain = Pokemon(
 65,
 108,
 65,
-[Habarenage,LanceFlamme,Surchauffe,CanonGraine]
+[Habanerage,LanceFlamme,Surchauffe,CanonGraine]
 )
 
 
@@ -210,7 +319,7 @@ Kravarech = Pokemon(
 90,
 97,
 123,
-[BueeNoire,Acidarmure,Ouragan,DracoMeteore]
+[Toxic,Acidarmure,Ouragan,DracoMeteore]
 )
 
 Farigiraf  = Pokemon(
@@ -246,11 +355,6 @@ PelageSablé  = Pokemon(
 85,
 [Elecanon,Telluriforce,Gravite,MagnetControle]
 )
-
-Test = Degats(Scorvilain, Sorbouboul, Habarenage)
-print(Test.degats())
-
-
 
 
 """
@@ -442,3 +546,15 @@ MiteDeFer  = Pokemon(
 )
 
 """
+
+running=True
+while running==True :
+    choix=int(input("voulez vous : 1) Jouer  2) Quitter"))
+    if choix==1 :
+        pokemons_dispo=[PelageSablé,Farigiraf,Kravarech,Sorbouboul,Scorvilain]
+        main=Battle(pokemons_dispo)
+        main.cree_equipe(pokemons_dispo)
+        main.choix_pokemon()
+        main.main()
+    elif choix==2 :
+        running==False
