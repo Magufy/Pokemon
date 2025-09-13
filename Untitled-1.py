@@ -198,9 +198,11 @@ class Battle:
             if action == 1 :
                 attaque=None
                 while attaque==None :
-                    attaque=input(f"choisissez une attaque : 1) {self.poke_front.comp[1].name}  2) {self.poke_front.comp[2].name}  3) {self.poke_front.comp[3].name}  4) {self.poke_front.comp[4].name}")
-                    if attaque in range (1,len(self.poke_front.comp)+1):
-                        Degats.degats(self.poke_front,self.bot.poke_front_bot,self.poke_front.comp[attaque-1])
+                    attaque=input(f"choisissez une attaque : 1) {self.poke_front.comp[0].nom}  2) {self.poke_front.comp[1].nom}  3) {self.poke_front.comp[2].nom}  4) {self.poke_front.comp[3].nom}   :")
+                    if 1 <= int(choix) <= 4:
+                        attaque = self.poke_front.comp[int(choix)-1]
+                        deg = Degats(self.poke_front, self.robot.poke_front_bot, attaque).degats()
+                        print(f"{self.poke_front.nom} utilise {attaque.nom} ! Dégâts infligés : {deg}")
                     else:
                         attaque=None
 
