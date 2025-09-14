@@ -177,7 +177,7 @@ class Battle:
 
     def cree_equipe(self,pokemons_dispo):
         while len(self.equipe)<1:
-            poke_num=int(input(f"choisissez le numero de votre pokemon votre pokemon {[i.nom for i in pokemons_dispo]}"))
+            poke_num=int(input(f"choisissez vos pokemons : {[i.nom for i in pokemons_dispo]}"))
             if poke_num in range (1,len(pokemons_dispo)+1):
                 self.equipe.append(copy.deepcopy(pokemons_dispo[poke_num-1]))
                 print('pokemon ajouté')
@@ -648,3 +648,4 @@ while running==True :
         main.main()
     elif choix==2 :
         running==False
+
