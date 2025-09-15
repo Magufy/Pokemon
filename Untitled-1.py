@@ -48,7 +48,7 @@ class Pokemon():
                 self.statut.remove("Burn")
                 print(f"{self.nom} n'est plus brûlé !")
 
-        for statut in ["Comptine", "Gel", "Paralysie", "Confusion"]:
+        for statut in ["Comptine", "Gel", "Confusion"]:
             if statut in self.statut:
                 if self.cant_attack:
                     if random.randint(1, 100) <= 50: 
@@ -58,6 +58,16 @@ class Pokemon():
                 else:
                     self.cant_attack = True
                     print(f"{self.nom} est affecté par {statut} et risque de ne pas attaquer !")
+
+        if "Paralysie" in self.statut:
+            if random.randint(1, 100) <= 20:
+                self.statut.remove("Paralysie")
+                print(f"{self.nom} n'est plus paralysé !")
+                self.cant_attack=False
+            else:
+                print(f"{self.nom} est paralysé, sa vitesse est réduite et il risque de ne pas attaquer !")
+                self.cant_attack=True
+
         #buff
         if "defense" in self.buffs:
             self.defense *= 1.5
@@ -98,10 +108,12 @@ class Degats:
 
     def degats(self):#rajouter les priorités
         vitesse=self.poke_att.vitesse
-        if self.poke_att.statut=="Paralysie":
-            vitesse=vitesse/4
-            if random.randint(0,100)<=25:
-                return("Raté  (paralysie)")
+        if "Paralysie" in self.poke_att.statut:   
+            vitesse = vitesse / 4
+            if random.randint(1,100) <= 100:
+                print(f"{self.poke_att.nom} est paralysé il ne peut pas attaquer !")
+                return 0
+            
         if self.attaque.puissance == 0:
             return 0
         if self.attaque.type in self.poke_def.immu:
@@ -215,8 +227,10 @@ class Battle:
         else:
             #attaquedebase
             deg = Degats(attaquant, defenseur, attaque).degats()
-            defenseur.pv -= deg
-            print(f"{attaquant.nom} utilise {attaque.nom} ! Dégâts infligés : {deg}")
+            
+            if deg !=0:   
+                defenseur.pv -= deg
+                print(f"{attaquant.nom} utilise {attaque.nom} ! Dégâts infligés : {deg}")
 
     def tour(self):
         self.mort_poke_front()
@@ -240,22 +254,25 @@ class Battle:
                                 f"2) {self.poke_front.comp[1].nom} | "
                                 f"3) {self.poke_front.comp[2].nom} | "
                                 f"4) {self.poke_front.comp[3].nom} : "))
-                attaque_joueur = self.poke_front.comp[choix-1]
-
-                if self.robot.poke_front_bot and self.robot.poke_front_bot.pv > 0:
-                    attaque_bot = choice(self.robot.poke_front_bot.comp)
+                if self.poke_front.cant_attack==False:
+                    attaque_joueur = self.poke_front.comp[choix-1]
                 else:
-                    attaque_bot = None
+                    print("vous ne pouvez pas")
+
+
+                if self.robot.poke_front_bot and self.robot.poke_front_bot.pv > 0 and self.robot.poke_front_bot.cant_attack==False :
+                    attaque_bot = choice(self.robot.poke_front_bot.comp)
+
 
                 if self.poke_front.vitesse >= (self.robot.poke_front_bot.vitesse if self.robot.poke_front_bot else 0):
                     self.executer_attaque(self.poke_front, self.robot.poke_front_bot, attaque_joueur)
 
-                    if self.robot.poke_front_bot and self.robot.poke_front_bot.pv > 0:
+                    if self.robot.poke_front_bot and self.robot.poke_front_bot.pv > 0 and self.robot.poke_front_bot.cant_attack==False:
                         print(f"Bot : {self.robot.poke_front_bot.nom}, utilise {attaque_bot.nom} !")
                         self.executer_attaque(self.robot.poke_front_bot, self.poke_front, attaque_bot)
 
                 else:
-                    if self.robot.poke_front_bot and self.robot.poke_front_bot.pv > 0:
+                    if self.robo1.poke_front_bot and self.robot.poke_front_bot.pv > 0 and self.robot.poke_front_bot.cant_attack==False:
                         print(f"Bot : {self.robot.poke_front_bot.nom}, utilise {attaque_bot.nom} !")
                         self.executer_attaque(self.robot.poke_front_bot, self.poke_front, attaque_bot)
 
@@ -301,7 +318,7 @@ class Battle:
 # ajouter : proba,precision,prio,PP
 
 #dans lordre :nom,type,statut,special,haut_crit,puissance,proba,precision,prio,PP,buff=None
-Habanerage = Attaque("Habanerage","Plante","Habanerage", False, False, 0, 100, 100, False, 24, buff="rage")
+Habanerage = Attaque("Habanerage","Plante","Paralysie", False, False, 0, 100, 100, False, 24, )
 LanceFlamme = Attaque("LanceFlamme","Feu", None, True, False, 90, 100, 100, False, 24)
 Surchauffe = Attaque("Surchauffe","Feu", None, True, False, 130, 100, 90, False, 5)
 CanonGraine = Attaque("CanonGraine","Plante", None, False, False, 80, 100, 100, False, 24)
@@ -648,4 +665,3 @@ while running==True :
         main.main()
     elif choix==2 :
         running==False
-
