@@ -105,6 +105,7 @@ class Degats:
         self.poke_att=poke_att
         self.poke_def=poke_def
         self.attaque=attaque
+        self.terrain=None
 
     def degats(self):#rajouter les priorités
         vitesse=self.poke_att.vitesse
@@ -180,12 +181,70 @@ class Bot:
     def choix_pokemon_bot(self):
         self.poke_front_bot = copy.deepcopy(choice(self.equipe_bot))
         self.equipe_bot.remove(self.poke_front_bot)
-
+        
+class Objet:
+    def __init__(self,nom,effet,equipe,equipe_adv,poke,poke_adv,nombre):
+        self.nom=nom
+        self.effet=effet
+        self.equipe=equipe
+        self.equipe_adv=equipe_adv
+        self.poke=poke
+        self.poke_adv=poke_adv
+        self.nombre=nombre
+        
+    def Use(self):
+        if self.nom not in ("Injection5G","Glock","Roulette Russe","Armagedon","Produits Dopants",)
+        if self.nombre>1:
+            self.nombre-=1
+            if self.nom=="Injection5G":
+                self.poke.statut=[]
+                self('ILS NOUS CONTROLENT (votre pokemon perd tout ses effets)')
+            elif self.nom=="Glock":
+                self.poke_adv.hp=0
+                print("Rapide et Efficace (le pokemon adverse n'a pas survecu a cette balle)")
+            elif self.nom=="Roulette Russe":
+                a=random.randint(1,2)
+                if a==1:
+                    self.poke.pv=0
+                    print("тебе не повезло")
+                else:
+                    self.poke_adv.pv=0
+                    print("тебе повезло")
+                
+            elif self.nom=="Armagedon":
+                i=random.randint(1,5)
+                    for j in range (0,i):
+                        a=random.randint(1,2)
+                    if a==1:
+                        self.poke.pv=0
+                    else:
+                        self.poke_adv.pv=0
+                print("pourquoi ?")
+            elif self.nom=="Produits Dopants":
+                self.poke.pv+=20
+                self.poke.attaque+=10
+                self.poke.attspe+=20
+                print("+20pv, +10att, +10att spé, c'est légal ça?")
+            elif self.nom=="Eau":
+                print("Votre pokemon est hydraté, c'est super mais a quoi ca sert ?")
+                #rien
+            elif self.nom=="Calmants Pour Ours":
+                self.poke_adv.statur.append("Comptine")
+                print("Votre pokepmon est boooriiiing, le pokemon adverse fait dodo")
+            elif self.nom=="Repos Long":
+                for i in self.poke.comp:
+                    i.PP+=10
+                self.poke.pv+=20
+                self.poke.statut.append("Comptine") if "Comptine" not in self.poke.statut
+                print("Mimimimimimimimimi (vous dermez et recuperez 10PP et 20pv")
+                
+        
 class Battle:
     def __init__(self,pokemons_dispo):
         self.equipe=[]
         self.poke_front=None
         self.robot= Bot(pokemons_dispo)
+        self.objets= []
 
     def cree_equipe(self,pokemons_dispo):
         while len(self.equipe)<1:
@@ -393,7 +452,7 @@ MurLumiere = Attaque("Mur Lumière","Normal", None, False, False, 0, 100, 100, F
 
 
 Scorvilain = Pokemon(
-"Scovilain",
+"Scovilain🔥🌱",
 ("Feu","Plante"),
 65,
 75,
@@ -412,7 +471,7 @@ Scorvilain = Pokemon(
 
 
 Sorbouboul = Pokemon(
-"Sorbouboul",
+"Sorbouboul❄️",
 ("Glace",),
 71,
 79,
@@ -429,7 +488,7 @@ Sorbouboul = Pokemon(
 )
 
 Kravarech = Pokemon(
-"Kravarech",
+"Kravarech💧",
 ("Dragon","Eau"),
 65,
 44,
@@ -497,7 +556,7 @@ Galvagon  = Pokemon(
 )
 
 Virevorreur  = Pokemon(
-"Virevorreur",
+"Virevorreur🌱",
 ("Plante","Spectre"),
 55,
 90,
@@ -514,7 +573,7 @@ Virevorreur  = Pokemon(
 )
 
 Pomdorochi  = Pokemon(
-"Pomdorochi",
+"Pomdorochi🌱",
 ("Dragon","Plante"),
 106,
 44,
@@ -531,7 +590,7 @@ Pomdorochi  = Pokemon(
 )
 
 Sylveroy  = Pokemon(
-"Sylveroy",
+"Sylveroy🌱",
 ("Psy","Plante"),
 100 ,
 80,
@@ -582,7 +641,7 @@ Pondralugon  = Pokemon(
 )
 
 Saquedeneu  = Pokemon(
-"Saquedeneu",
+"Saquedeneu🌱",
 ("Plante",),
 65,
 60,
@@ -599,7 +658,7 @@ Saquedeneu  = Pokemon(
 )
 
 Chartor  = Pokemon(
-"Chartor",
+"Chartor🔥",
 ("Feu",),
 70,
 20,
@@ -616,7 +675,7 @@ Chartor  = Pokemon(
 )
 
 Pierroteknik  = Pokemon(
-"Pierroteknik",
+"Pierroteknik🔥👻",
 ("Feu","Spectre"),
 53,
 107,
@@ -633,7 +692,7 @@ Pierroteknik  = Pokemon(
 )
 
 MiteDeFer  = Pokemon(
-"Mite-de-Fer",
+"Mite-de-Fer🔥♒",
 ("Feu","Poison"),
 80,
 110,
