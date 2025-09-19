@@ -2,6 +2,7 @@ import random
 from random import choice
 import copy
 
+
 class Pokemon():
     def __init__(self,nom,type,pv,vitesse,res,res2,faib,faib2,immu,attaque,defense,attspe,defspe,comp):
         self.nom = nom
@@ -90,8 +91,6 @@ class Pokemon():
             self.defense /= 2
 
 
-        
-
 class Attaque():
     def __init__(self,nom,type,statut,special,haut_crit,puissance,proba,precision,prio,PP,buff=None):
         self.nom=nom
@@ -114,8 +113,9 @@ class Degats:
 
     def degats(self):#rajouter les priorités
         vitesse=self.poke_att.vitesse
-        if "Paralysie" in self.poke_att.statut:   
-            if random.randint(1,100) <= 75:
+        if "Paralysie" in self.poke_att.statut:  
+            vitesse = vitesse / 4 
+            if random.randint(1, 100) <= 75:
                 print(f"{self.poke_att.nom} est paralysé il ne peut pas attaquer !")
                 return 0
         if "Comptine" in self.poke_att.statut:   
@@ -133,8 +133,7 @@ class Degats:
         
         Att = self.poke_att.attaque if self.attaque.special == False else self.poke_att.attspe
         Def = self.poke_def.defense if self.attaque.special == False else self.poke_def.defspe
-        Pui=self.attaque.puissance
-
+        Pui = self.attaque.puissance
         STAB=1.5 if self.attaque.type in self.poke_att.type else 1
         
         if self.attaque.type in self.poke_def.faib2:
@@ -179,6 +178,7 @@ class Degats:
 
         return int(Degats)
 
+
 class Bot:
     def __init__(self,pokemons_dispo):
         self.equipe_bot=[]
@@ -191,6 +191,66 @@ class Bot:
         self.poke_front_bot = copy.deepcopy(choice(self.equipe_bot))
         self.equipe_bot.remove(self.poke_front_bot)
 
+class Objet:
+    def __init__(self, nom, equipe, equipe_adv, poke, poke_adv, nombre):
+        self.nom = nom
+        self.equipe = equipe
+        self.equipe_adv = equipe_adv
+        self.poke = poke
+        self.poke_adv = poke_adv
+        self.nombre = nombre
+
+    def use(self):
+        if self.nom not in ("Injection5G", "Glock", "Roulette Russe", "Armagedon", "Produits Dopants", "Eau", "Calmants Pour Ours", "Repos Long"):
+            return
+        if self.nombre > 1:
+            self.nombre -= 1
+            if self.nom == "Injection5G":
+                self.poke.statut = []
+                self('ILS NOUS CONTROLENT (votre pokemon perd tout ses effets)')
+            elif self.nom == "Glock":
+                self.poke_adv.hp = 0
+                print(
+                    "Rapide et Efficace (le pokemon adverse n'a pas survecu a cette balle)")
+            elif self.nom == "Roulette Russe":
+                a = random.randint(1, 2)
+                if a == 1:
+                    self.poke.pv = 0
+                    print("тебе не повезло")
+                else:
+                    self.poke_adv.pv = 0
+                    print("тебе повезло")
+
+            elif self.nom == "Armagedon":
+                i = random.randint(1, 5)
+                for j in range(0, i):
+                    a = random.randint(1, 2)
+                    if a == 1:
+                        self.poke.pv = 0
+                    else:
+                        self.poke_adv.pv = 0
+                print("pourquoi ?")
+            elif self.nom == "Produits Dopants":
+                self.poke.pv += 20
+                self.poke.attaque += 10
+                self.poke.attspe += 20
+                print(f"+20pv, +10att, +10att spé, c'est légal ça?     vous avez maintenant {self.poke.pv}pv")
+            elif self.nom == "Eau":
+                print("Votre pokemon est hydraté, c'est super mais a quoi ca sert ?")
+                # rien
+            elif self.nom == "Calmants Pour Ours":
+                if "Comptine" not in self.poke_adv.statut:
+                    self.poke_adv.statur.append("Comptine")
+                print("Votre pokepmon est boooriiiing, le pokemon adverse fait dodo")
+            elif self.nom == "Repos Long":
+                for i in self.poke.comp:
+                    i.PP += 10
+                self.poke.pv += 20
+                if "Comptine" not in self.poke.statut:
+                    self.poke.statut.append("Comptine")
+                print(f"Mimimimimimimimimi (vous dermez et recuperez 10PP et 20pv et vous avez {self.poke.pv}pv)")
+
+
 class Battle:
     def __init__(self,pokemons_dispo):
         self.equipe=[]
@@ -199,7 +259,8 @@ class Battle:
 
     def cree_equipe(self,pokemons_dispo):
         while len(self.equipe)<1:
-            poke_num=int(input(f"choisissez vos pokemons : {[i.nom for i in pokemons_dispo]}"))
+            poke_num=int(
+                input(f"choisissez vos pokemons : {[i.nom for i in pokemons_dispo]}"))
             if poke_num in range (1,len(pokemons_dispo)+1):
                 self.equipe.append(copy.deepcopy(pokemons_dispo[poke_num-1]))
                 print('pokemon ajouté')
@@ -208,7 +269,8 @@ class Battle:
             
     def choix_pokemon(self):
         while self.poke_front==None:
-            poke=int(input(f"choisissez un pokemon a envoyer au combat{[i.nom for i in self.equipe]}"))
+            poke=int(input(
+                f"choisissez un pokemon a envoyer au combat{[i.nom for i in self.equipe]}"))
             if poke in range (1,len(self.equipe)+1):
                 self.poke_front=self.equipe[poke-1]
                 self.equipe.remove(self.equipe[poke-1])
@@ -219,28 +281,35 @@ class Battle:
             self.choix_pokemon()
     def executer_attaque(self, attaquant, defenseur, attaque):
         if attaque.puissance == 0:
-            #buff
+            # buff
             if attaque.buff:
                 attaquant.buffs.append(attaque.buff)
                 if attaque.buff == "defense":
-                    print(f"{attaquant.nom} utilise {attaque.nom} ! Sa Défense augmente fortement !")
+                    print( 
+                        f"{attaquant.nom} utilise {attaque.nom} ! Sa Défense augmente fortement !")
+
                 elif attaque.buff == "attspe":
-                    print(f"{attaquant.nom} utilise {attaque.nom} ! Son Attaque Spéciale augmente fortement !")
+                    print( 
+                        f"{attaquant.nom} utilise {attaque.nom} ! Son Attaque Spéciale augmente fortement !")
                 elif attaque.buff == "defense+defspe":
-                    print(f"{attaquant.nom} utilise {attaque.nom} ! Sa Défense et Défense Spéciale augmentent !")
+                    print(
+                        f"{attaquant.nom} utilise {attaque.nom} ! Sa Défense et Défense Spéciale augmentent !")
                 elif attaque.buff == "rage":
-                    print(f"{attaquant.nom} est pris de rage ! Son Attaque augmente énormément mais sa Défense baisse !")
-            #statut
+                    print(
+                        f"{attaquant.nom} est pris de rage ! Son Attaque augmente énormément mais sa Défense baisse !")
+            # statut
             elif attaque.statut:
                 defenseur.statut.append(attaque.statut)
-                print(f"{attaquant.nom} utilise {attaque.nom} ! {defenseur.nom} est affecté par {attaque.statut} !")
+                print(
+                    f"{attaquant.nom} utilise {attaque.nom} ! {defenseur.nom} est affecté par {attaque.statut} !")
         else:
-            #attaquedebase
+            # attaquedebase
             deg = Degats(attaquant, defenseur, attaque).degats()
             
-            if deg !=0:   
+            if deg != 0:   
                 defenseur.pv -= deg
                 print(f"{attaquant.nom} utilise {attaque.nom} ! Dégâts infligés : {deg}")
+
 
     def tour(self):
         self.mort_poke_front()
@@ -253,10 +322,10 @@ class Battle:
         if not hasattr(self, 'bot_sent'):
             print(f"\nLe bot envoie {self.robot.poke_front_bot.nom} !")
             self.bot_sent = True  
-
         action = None
         while action is None:
-            action = int(input("choisissez une action : 1) Attaquer , 2) Objet , 3) Changer , 4) Capituler : "))
+            action = int(input(
+                "choisissez une action : 1) Attaquer , 2) Objet , 3) Changer , 4) Capituler : "))
 
             if action == 1:
                 choix = int(input(f"Choisissez une attaque : "
@@ -290,8 +359,21 @@ class Battle:
                         self.executer_attaque(self.poke_front, self.robot.poke_front_bot, attaque_joueur)
 
             elif action == 2: 
-                print("Pas encore implémenté.")
-                return
+                objet_util=None
+                while objet_util==None:
+                    objet_util=int(input(f"Choisissez un objet : "
+                                  f"1) {self.objets[0].nom} | "
+                                  f"2) {self.objets[1].nom} | "
+                                  f"3) {self.objets[2].nom} | "
+                                  f"4) {self.objets[3].nom} | "
+                                  f"5) {self.objets[4].nom} | "
+                                  f"6) {self.objets[5].nom} | "
+                                  f"7) {self.objets[6].nom} | "
+                                  f"8) {self.objets[7].nom} : "))
+                    if int(objet_util) in range (0,7):
+                        self.objets[objet_util].use()
+                    else:
+                        objet_util=None
 
             elif action == 3: 
                 poke_change = int(input(f"Choisissez un Pokémon : {[i.nom for i in self.equipe]} : "))
@@ -307,9 +389,17 @@ class Battle:
                 running = False
                 return
 
-
-
     def main(self):
+        Injection5G = Objet("Injection5G", self.equipe,self.robot.equipe_bot,self.poke_front,self.robot.poke_front_bot,3)
+        Glock = Objet("Glock", self.equipe,self.robot.equipe_bot,self.poke_front,self.robot.poke_front_bot,1)
+        RouletteRusse = Objet("Roulette Russe", self.equipe,self.robot.equipe_bot,self.poke_front,self.robot.poke_front_bot,5)
+        Armagedon = Objet("Armagedon", self.equipe,self.robot.equipe_bot,self.poke_front,self.robot.poke_front_bot,1)
+        ProduitsDopants = Objet("Produits Dopants", self.equipe,self.robot.equipe_bot,self.poke_front,self.robot.poke_front_bot,3)
+        Eau = Objet("Eau", self.equipe,self.robot.equipe_bot,self.poke_front,self.robot.poke_front_bot,3)
+        CalmantsPourOurs = Objet("Calmants Pour Ours", self.equipe,self.robot.equipe_bot,self.poke_front,self.robot.poke_front_bot,2)
+        ReposLong = Objet("Repos Long", self.equipe,self.robot.equipe_bot,self.poke_front,self.robot.poke_front_bot,4)
+        self.objets = [Injection5G,Glock,RouletteRusse,Armagedon,ProduitsDopants,Eau,CalmantsPourOurs,ReposLong]
+
         while True:
             if (self.equipe == [] and self.poke_front is None) or (self.poke_front and self.poke_front.pv <= 0):
                 print("Vous avez perdu (la honte)")
@@ -320,9 +410,6 @@ class Battle:
                 return
 
             self.tour()
-
-
-
 
 
 # ajouter : proba,precision,prio,PP
@@ -412,7 +499,7 @@ PistoletAO = Attaque("Pistolet à O","Eau", None, False, False, 40, 100, 100, Fa
 
 
 Scorvilain = Pokemon(
-"Scovilain",
+"Scovilain🔥🌱",
 ("Feu","Plante"),
 65,
 75,
@@ -431,7 +518,7 @@ Scorvilain = Pokemon(
 
 
 Sorbouboul = Pokemon(
-"Sorbouboul",
+"Sorbouboul❄️",
 ("Glace",),
 71,
 79,
@@ -805,7 +892,8 @@ while running==True :
         pokemons_dispo = [
         Scorvilain, Sorbouboul, Kravarech, Farigiraf, PelageSablé,
         Galvagon, Virevorreur, Pomdorochi, Sylveroy,
-        Amovenus, Pondralugon, Saquedeneu, Chartor, Pierroteknik, MiteDeFer
+        Amovenus, Pondralugon, Saquedeneu, Chartor, Pierroteknik, MiteDeFer,
+        Hydragla,Ferdeter,Tomberro ,Pechaminus ,Bekaglacon ,IreFoudre ,Balbaleze 
         ]   
         main=Battle(pokemons_dispo)
         main.cree_equipe(pokemons_dispo)
