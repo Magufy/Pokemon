@@ -400,6 +400,15 @@ Boutefeu = Attaque("Boutefeu","Feu", None, True, False, 90, 100, 100, False, 10)
 Toxik = Attaque("Toxik","Poison","Poison", False, False, 0, 100, 100, False, 15)
 MurLumiere = Attaque("Mur Lumière","Normal", None, False, False, 0, 100, 100, False, 10,buff="defense")
 
+Charge = Attaque("Charge", "Normal", None, False, False, 40, 100, 100, False, 25)
+PoingGlace = Attaque("Poing-Glace","Glace",None, False, False, 65, 100, 100, False, 15)
+TeteDeFer = Attaque("Tête-De-Fer", "Acier", None, False, False, 80, 100, 80, False, 15)
+CarapacePsy = Attaque("Carapace Psy","Psy", "MG", True, False, 0, 100, 100, False, 20 ,buff="defense+defspe")
+
+CoupDBoule = Attaque("Coup d'Boule","Normal", None, False, False, 70, 100, 100, False, 15)
+Armure = Attaque("Armure","Normal", "MG", True, False, 0, 100, 100, False, 20 ,buff="defense+defspe")
+Eboulement = Attaque("Eboulement","Roche","Paralysie", False, False, 75, 100, 90, False, 15)
+PistoletAO = Attaque("Pistolet à O","Eau", None, False, False, 40, 100, 100, False, 25)
 
 
 Scorvilain = Pokemon(
@@ -658,6 +667,135 @@ MiteDeFer  = Pokemon(
 110,
 [StridoSon,Boutefeu,Toxik,MurLumiere]
 )
+
+Balbaleze = Pokemon(
+    "Balbalèze",
+    ("Glace",),
+    170,
+    73,
+    ("Glace",),
+    (),
+    ("Feu","Roche","Combat","Acier",),
+    (),
+    (),
+    113,
+    65,
+    45,
+    55,
+    [Blizzard,Charge,Malediction,Ultralaser]
+)
+
+ 
+
+IreFoudre = Pokemon(
+    "Ire-Foudre",
+    ("Electrique",),
+    125,
+    73,
+    ("Acier","Eau","Feu","Plante","Vol",),
+    ("Electrique",),
+    ("Dragon","Fée","Glace","Sol",),
+    (),
+    (),
+    91,
+    137,
+    89,
+    75,
+    [Zenith,DracoMeteore,CriDraconique,Ultralaser]
+)
+
+ 
+
+Bekaglacon = Pokemon(
+    "Békaglaçon",
+    ("Glace",),
+    75,
+    50,
+    ("Glace",),
+    (),
+    ("Acier","Combat","Feu","Roche",),
+    (),
+    (),
+    80,
+    110,
+    65,
+    90,
+    [Blizzard,Charge,PoingGlace,TeteDeFer]
+)
+
+ 
+
+Pechaminus = Pokemon(
+    "Péchaminus",
+    ("Poison","Spectre",),
+    88,
+    88,
+    ("Fée","Plante",),
+    ("Poison"),
+    ("Psy","Sol","Spectre","Ténèbres",),
+    (),
+    ("Normal","Combat",),
+    88,
+    160,
+    88,
+    88,
+    [Machination,Toxic,CarapacePsy,GazToxik]
+)
+Tomberro = Pokemon(
+    "Tomberro",
+    ("Spectre",),
+    72,
+    68,
+    ("Insecte","Poison",),
+    (),
+    ("Spectre","Ténèbres"),
+    (),
+    ("Normal","Combat",),
+    101,
+    100,
+    50,
+    97,
+    [CoupDBoule,Toxic,CarapacePsy,Calinerie]
+)
+
+ 
+
+Ferdeter = Pokemon(
+    "FerDeTer",
+    ("Acier",),
+    70,
+    65,
+    ("Acier","Dragon","Fée","Glace","Insecte","Normal","Plante","Psy","Roche","Vol",),
+    (),
+    ("Combat","Feu","Sol",),
+    (),
+    ("Poison",),
+    85,
+    145,
+    60,
+    55,
+    [Charge,Armure,TeteDeFer,Eboulement]
+)
+
+ 
+
+Hydragla = Pokemon(
+    "Hydragla",
+    ("Eau",),
+    90,
+    55,
+    ("Eau",),
+    ("Glace",),
+    ("Roche","Plante","Combat","Electrique",),
+    (),
+    (),
+    90,
+    100,
+    80,
+    90,
+    [Blizzard,GigaImpact,CoupDBoule,PistoletAO]
+)
+ 
 
 
 running=True
