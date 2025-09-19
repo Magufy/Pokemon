@@ -2,7 +2,7 @@ import random
 from random import choice
 import copy
 
-
+#notif
 class Pokemon():
     def __init__(self,nom,type,pv,vitesse,res,res2,faib,faib2,immu,attaque,defense,attspe,defspe,comp):
         self.nom = nom
@@ -901,3 +901,4 @@ while running==True :
         main.main()
     elif choix==2 :
         running==False
+
