@@ -2,7 +2,7 @@ import random
 from random import choice
 import copy
 
-#notif
+
 class Pokemon():
     def __init__(self,nom,type,pv,vitesse,res,res2,faib,faib2,immu,attaque,defense,attspe,defspe,comp):
         self.nom = nom
@@ -497,6 +497,8 @@ Armure = Attaque("Armure","Normal", "MG", True, False, 0, 100, 100, False, 20 ,b
 Eboulement = Attaque("Eboulement","Roche","Paralysie", False, False, 75, 100, 90, False, 15)
 PistoletAO = Attaque("Pistolet à O","Eau", None, False, False, 40, 100, 100, False, 25)
 
+EspritFrappeur=Attaque("Esprit Frappeur","Spectre",None,None,None,110,0,100,False,10)
+
 
 Scorvilain = Pokemon(
 "Scovilain🔥🌱",
@@ -883,6 +885,22 @@ Hydragla = Pokemon(
     [Blizzard,GigaImpact,CoupDBoule,PistoletAO]
 )
  
+Tutétékri=Pokemon(
+    "Tutétékri",
+    ("Sol","Spectre"),
+    58,
+    30,
+    ("Insecte","Roche",),
+    ("Poison",),
+    ("Plante","Spectre","Tenebre","Eau","Glace",),
+    (),
+    ("Electrique","Combat","Normal",),
+    95,
+    145,
+    50,
+    105,
+    [Malediction,Ultralaser,PsykoudBoul,EspritFrappeur]
+)
 
 
 running=True
@@ -893,7 +911,7 @@ while running==True :
         Scorvilain, Sorbouboul, Kravarech, Farigiraf, PelageSablé,
         Galvagon, Virevorreur, Pomdorochi, Sylveroy,
         Amovenus, Pondralugon, Saquedeneu, Chartor, Pierroteknik, MiteDeFer,
-        Hydragla,Ferdeter,Tomberro ,Pechaminus ,Bekaglacon ,IreFoudre ,Balbaleze 
+        Hydragla,Ferdeter,Tomberro ,Pechaminus ,Bekaglacon ,IreFoudre ,Balbaleze ,Tutétékri
         ]   
         main=Battle(pokemons_dispo)
         main.cree_equipe(pokemons_dispo)
@@ -901,4 +919,4 @@ while running==True :
         main.main()
     elif choix==2 :
         running==False
-
+        
