@@ -240,7 +240,7 @@ class Objet:
                 # rien
             elif self.nom == "Calmants Pour Ours":
                 if "Comptine" not in self.poke_adv.statut:
-                    self.poke_adv.statur.append("Comptine")
+                    self.poke_adv.statut.append("Comptine")
                 print("Votre pokepmon est boooriiiing, le pokemon adverse fait dodo")
             elif self.nom == "Repos Long":
                 for i in self.poke.comp:
@@ -259,8 +259,8 @@ class Battle:
 
     def cree_equipe(self,pokemons_dispo):
         while len(self.equipe)<1:
-            poke_num=int(
-                input(f"choisissez vos pokemons : {[i.nom for i in pokemons_dispo]}"))
+            poke_num=int(input(f"choisissez vos pokemons :" 
+                        f"{[(i+1, pokemons_dispo[i].nom) for i in range (0,len(pokemons_dispo))]}"))
             if poke_num in range (1,len(pokemons_dispo)+1):
                 self.equipe.append(copy.deepcopy(pokemons_dispo[poke_num-1]))
                 print('pokemon ajouté')
@@ -328,35 +328,43 @@ class Battle:
                 "choisissez une action : 1) Attaquer , 2) Objet , 3) Changer , 4) Capituler : "))
 
             if action == 1:
-                choix = int(input(f"Choisissez une attaque : "
-                                f"1) {self.poke_front.comp[0].nom} | "
-                                f"2) {self.poke_front.comp[1].nom} | "
-                                f"3) {self.poke_front.comp[2].nom} | "
-                                f"4) {self.poke_front.comp[3].nom} : "))
-                if self.poke_front.cant_attack==False:
-                    attaque_joueur = self.poke_front.comp[choix-1]
-                else:
-                    print("vous ne pouvez pas")
+                choix=None
+                while choix==None:
+                    choix = int(input(f"Choisissez une attaque : "
+                                    f"1) {self.poke_front.comp[0].nom} | "
+                                    f"2) {self.poke_front.comp[1].nom} | "
+                                    f"3) {self.poke_front.comp[2].nom} | "
+                                    f"4) {self.poke_front.comp[3].nom} : "))
+                    
+                    if type(choix)!='int' or choix not in range (1,4):
+                        choix=None
+                        print("Entrez un chiffre entre 1 et 4")
+
+                    else:
+                        if self.poke_front.cant_attack==False:
+                            attaque_joueur = self.poke_front.comp[choix-1]
+                        else:
+                            print("vous ne pouvez pas")
 
 
-                if self.robot.poke_front_bot and self.robot.poke_front_bot.pv > 0 and self.robot.poke_front_bot.cant_attack==False :
-                    attaque_bot = choice(self.robot.poke_front_bot.comp)
+                        if self.robot.poke_front_bot and self.robot.poke_front_bot.pv > 0 and self.robot.poke_front_bot.cant_attack==False :
+                            attaque_bot = choice(self.robot.poke_front_bot.comp)
 
 
-                if self.poke_front.vitesse >= (self.robot.poke_front_bot.vitesse if self.robot.poke_front_bot else 0):
-                    self.executer_attaque(self.poke_front, self.robot.poke_front_bot, attaque_joueur)
+                        if self.poke_front.vitesse >= (self.robot.poke_front_bot.vitesse if self.robot.poke_front_bot else 0):
+                            self.executer_attaque(self.poke_front, self.robot.poke_front_bot, attaque_joueur)
 
-                    if self.robot.poke_front_bot and self.robot.poke_front_bot.pv > 0 and self.robot.poke_front_bot.cant_attack==False:
-                        print(f"Bot : {self.robot.poke_front_bot.nom}, utilise {attaque_bot.nom} !")
-                        self.executer_attaque(self.robot.poke_front_bot, self.poke_front, attaque_bot)
+                            if self.robot.poke_front_bot and self.robot.poke_front_bot.pv > 0 and self.robot.poke_front_bot.cant_attack==False:
+                                print(f"Bot : {self.robot.poke_front_bot.nom}, utilise {attaque_bot.nom} !")
+                                self.executer_attaque(self.robot.poke_front_bot, self.poke_front, attaque_bot)
 
-                else:
-                    if self.robot.poke_front_bot and self.robot.poke_front_bot.pv > 0 and self.robot.poke_front_bot.cant_attack==False:
-                        print(f"Bot : {self.robot.poke_front_bot.nom}, utilise {attaque_bot.nom} !")
-                        self.executer_attaque(self.robot.poke_front_bot, self.poke_front, attaque_bot)
+                        else:
+                            if self.robot.poke_front_bot and self.robot.poke_front_bot.pv > 0 and self.robot.poke_front_bot.cant_attack==False:
+                                print(f"Bot : {self.robot.poke_front_bot.nom}, utilise {attaque_bot.nom} !")
+                                self.executer_attaque(self.robot.poke_front_bot, self.poke_front, attaque_bot)
 
-                    if self.poke_front.pv > 0:
-                        self.executer_attaque(self.poke_front, self.robot.poke_front_bot, attaque_joueur)
+                            if self.poke_front.pv > 0:
+                                self.executer_attaque(self.poke_front, self.robot.poke_front_bot, attaque_joueur)
 
             elif action == 2: 
                 objet_util=None
@@ -370,18 +378,32 @@ class Battle:
                                   f"6) {self.objets[5].nom} | "
                                   f"7) {self.objets[6].nom} | "
                                   f"8) {self.objets[7].nom} : "))
-                    if int(objet_util) in range (0,7):
-                        self.objets[objet_util].use()
-                    else:
+                    
+                    if type(objet_util)!='int' or objet_util-1 not in range (0,7):
                         objet_util=None
+                        print("Entrez un chiffre entre 1 et 8")
+
+                    elif self.objets[objet_util-1].nombre<1:
+                        objet_util=None
+                        print("Vous n'avez plus cet objet")
+
+                    else:
+                        self.objets[objet_util-1].use()
+
 
             elif action == 3: 
-                poke_change = int(input(f"Choisissez un Pokémon : {[i.nom for i in self.equipe]} : "))
-                if 1 <= poke_change <= len(self.equipe):
-                    self.equipe.append(self.poke_front)
-                    self.poke_front = self.equipe[poke_change-1]
-                    self.equipe.remove(self.poke_front)
-                    print(f"Vous envoyez {self.poke_front.nom} !")
+                poke_change=None
+                while poke_change==None:
+                    poke_change = int(input(f"Choisissez un Pokémon : {[i.nom for i in self.equipe]} : "))
+
+                    if type(poke_change)!='int' or poke_change not in range (1,len(self.equipe)):
+                        print(f"Entrez un chiffre entre 1 et {len(self.equipe)}")
+                        poke_change=None
+                    else:
+                        self.equipe.append(self.poke_front)
+                        self.poke_front = self.equipe[poke_change-1]
+                        self.equipe.remove(self.poke_front)
+                        print(f"Vous envoyez {self.poke_front.nom} !")
 
             elif action == 4: 
                 print("Vous abandonnez...")
@@ -415,93 +437,92 @@ class Battle:
 # ajouter : proba,precision,prio,PP
 
 #dans lordre :nom,type,statut,special,haut_crit,puissance,proba,precision,prio,PP,buff=None
-Habanerage = Attaque("Habanerage","Plante","Gel", False, False, 0, 100, 100, False, 24)
-LanceFlamme = Attaque("LanceFlamme","Feu", None, True, False, 90, 100, 100, False, 24)
-Surchauffe = Attaque("Surchauffe","Feu", None, True, False, 130, 100, 90, False, 5)
-CanonGraine = Attaque("CanonGraine","Plante", None, False, False, 80, 100, 100, False, 24)
+Habanerage = Attaque("Habanerage🌱","Plante","Gel", False, False, 0, 100, 100, False, 24)
+LanceFlamme = Attaque("LanceFlamme🔥","Feu", None, True, False, 90, 100, 100, False, 24)
+Surchauffe = Attaque("Surchauffe🔥","Feu", None, True, False, 130, 100, 90, False, 5)
+CanonGraine = Attaque("CanonGraine🌱","Plante", None, False, False, 80, 100, 100, False, 24)
 
-Blizzard = Attaque("Blizzard","Glace", None, True, False, 110, 100, 70, False, 5)
-Stalactite = Attaque("Stalactite","Glace", None, False, False, 25, 100, 100, False, 30)
-DansePluie = Attaque("DansePluie","Eau", "Pluie", True, False, 0, 100, 100, False, 5)
-Destruction = Attaque("Destruction","Normal", None, False, False, 200, 100, 100, False, 5)
+Blizzard = Attaque("Blizzard❄️","Glace", None, True, False, 110, 100, 70, False, 5)
+Stalactite = Attaque("Stalactite❄️","Glace", None, False, False, 25, 100, 100, False, 30)
+DansePluie = Attaque("DansePluie💧","Eau", "Pluie", True, False, 0, 100, 100, False, 5)
+Destruction = Attaque("Destruction🔘","Normal", None, False, False, 200, 100, 100, False, 5)
 
-Toxic=Attaque("Toxic","Poison","Poison", False, False, 0, 100, 100, False, 16)
-Acidarmure = Attaque("Acidarmure","Poison", "Acidarmure", True, False, 0, 100, 100, False, 20,buff="defense")
-Ouragan = Attaque("Ouragan","Vol", None, True, False, 40, 100, 100, False, 20)
-DracoMeteore = Attaque("DracoMeteore","Dragon", None, True, False, 130, 100, 90, False, 5)
+Toxik=Attaque("Toxik🫐","Poison","Poison", False, False, 0, 100, 100, False, 16)
+Acidarmure = Attaque("Acidarmure🫐","Poison", "Acidarmure", True, False, 0, 100, 100, False, 20,buff="defense")
+Ouragan = Attaque("Ouragan🪶","Vol", None, True, False, 40, 100, 100, False, 20)
+DracoMeteore = Attaque("DracoMeteore🐲","Dragon", None, True, False, 130, 100, 90, False, 5)
 
-Psyko = Attaque("Psyko","Psy", None, True, False, 90, 100, 100, False, 10)
-Machination = Attaque("Machination","Ténèbres", "Machination", True, False, 0, 100, 100, False, 20, buff="attspe")
-DissonancePsy = Attaque("DissonancePsy","Psy", None, True, False, 75, 100, 100, False, 10)
-Gravite = Attaque("Gravite","Psy", "Statut", True, False, 0, 100, 100, False, 5)
+Psyko = Attaque("Psyko🧠","Psy", None, True, False, 90, 100, 100, False, 10)
+Machination = Attaque("Machination👤","Ténèbres", "Machination", True, False, 0, 100, 100, False, 20, buff="attspe")
+DissonancePsy = Attaque("DissonancePsy🧠","Psy", None, True, False, 75, 100, 100, False, 10)
+Gravite = Attaque("Gravite🧠","Psy", "Statut", True, False, 0, 100, 100, False, 5)
 
-Elecanon = Attaque("Elecanon","Electrique", None, True, False, 120, 100, 50, False, 20)
-Telluriforce = Attaque("Telluriforce","Sol", None, True, False, 90, 100, 100, False, 20)
-MagnetControle = Attaque("MagnetControle","Electrique", "MG", True, False, 0, 100, 100, False, 20 ,buff="defense+defspe")
-CavalerieLourde = Attaque("Cavalerie Lourde","Dragon", None, False, False, 90, 100, 100, False, 10)
-EclairFou = Attaque("Éclair Fou","Electrique", None, True, False, 80, 100, 100, False, 15)
-Colere = Attaque("Colère","Dragon", None, False, False, 120, 100, 100, False, 10)
-CageEclair = Attaque("Cage Éclair","Electrique", None, False, False, 0, 100, 100, False, 20,buff="defense")
+Elecanon = Attaque("Elecanon⚡","Electrique", None, True, False, 120, 100, 50, False, 20)
+Telluriforce = Attaque("Telluriforce🟫","Sol", None, True, False, 90, 100, 100, False, 20)
+MagnetControle = Attaque("MagnetControle⚡","Electrique", "MG", True, False, 0, 100, 100, False, 20 ,buff="defense+defspe")
+CavalerieLourde = Attaque("Cavalerie Lourde🐲","Dragon", None, False, False, 90, 100, 100, False, 10)
+EclairFou = Attaque("Éclair Fou⚡","Electrique", None, True, False, 80, 100, 100, False, 15)
+Colere = Attaque("Colère🐲","Dragon", None, False, False, 120, 100, 100, False, 10)
+CageEclair = Attaque("Cage Éclair⚡","Electrique", None, False, False, 0, 100, 100, False, 20,buff="defense")
 
-VoleForce = Attaque("Vole-Force","Plante", None, False, False, 90, 100, 100, False, 15)
-OmbrePortee = Attaque("Ombre Portée","Spectre", None, True, False, 80, 100, 100, False, 10)
-Megafouet = Attaque("Mégafouet","Plante", None, False, False, 120, 100, 85, False, 10)
-Malediction = Attaque("Malédiction","Spectre", "Malédiction", False, False, 0, 100, 100, False, 5)
+VoleForce = Attaque("Vole-Force🌱","Plante", None, False, False, 90, 100, 100, False, 15)
+OmbrePortee = Attaque("Ombre Portée👻","Spectre", None, True, False, 80, 100, 100, False, 10)
+Megafouet = Attaque("Mégafouet🌱","Plante", None, False, False, 120, 100, 85, False, 10)
+Malediction = Attaque("Malédiction👻","Spectre", "Malédiction", False, False, 0, 100, 100, False, 5)
 
-Rapace = Attaque("Rapace","Poison", None, False, False, 80, 100, 100, False, 15)
-GigaImpact = Attaque("Giga Impact","Normal", None, False, False, 150, 100, 90, False, 5)
-VoixEnvoutante = Attaque("Voix Envoûtante","Fée", None, True, False, 90, 100, 100, False, 10)
-GazToxik = Attaque("Gaz Toxik","Poison", "Poison", False, False, 0, 100, 100, False, 10)
+Rapace = Attaque("Rapace🫐","Poison", None, False, False, 80, 100, 100, False, 15)
+GigaImpact = Attaque("Giga Impact🔘","Normal", None, False, False, 150, 100, 90, False, 5)
+VoixEnvoutante = Attaque("Voix Envoûtante🦋","Fée", None, True, False, 90, 100, 100, False, 10)
+GazToxik = Attaque("Gaz Toxik🫐","Poison", "Poison", False, False, 0, 100, 100, False, 10)
 
-CriDraconique = Attaque("Cri Draconique","Dragon", None, True, False, 80, 100, 100, False, 10)
-TempeteVerte = Attaque("Tempête Verte","Plante", None, True, False, 90, 100, 100, False, 10)
-Soin = Attaque("Soin","Normal", None, False, False, 0, 100, 100, False, 5)
-PsykoudBoul = Attaque("Psykoud'Boul","Psy", None, False, False, 80, 100, 100, False, 10)
-Interversion = Attaque("Interversion","Psy", None, False, False, 0, 100, 100, False, 10)
-ForceAjoutee = Attaque("Force Ajoutée","Plante", None, False, False, 80, 100, 100, False, 10)
+CriDraconique = Attaque("Cri Draconique🐲","Dragon", None, True, False, 80, 100, 100, False, 10)
+TempeteVerte = Attaque("Tempête Verte🌱","Plante", None, True, False, 90, 100, 100, False, 10)
+Soin = Attaque("Soin🔘","Normal", None, False, False, 0, 100, 100, False, 5)
+PsykoudBoul = Attaque("Psykoud'Boul🧠","Psy", None, False, False, 80, 100, 100, False, 10)
+Interversion = Attaque("Interversion🧠","Psy", None, False, False, 0, 100, 100, False, 10)
+ForceAjoutee = Attaque("Force Ajoutée🌱","Plante", None, False, False, 80, 100, 100, False, 10)
 
-Calinerie = Attaque("Câlinerie","Fée", None, True, False, 70, 100, 100, False, 15)
-ExploBrume = Attaque("Explo-Brume","Fée", None, True, False, 90, 100, 100, False, 10)
-VoixEnjoleuse = Attaque("Voix Enjôleuse","Fée", None, True, False, 80, 100, 100, False, 10)
+Calinerie = Attaque("Câlinerie🦋","Fée", None, True, False, 70, 100, 100, False, 15)
+ExploBrume = Attaque("Explo-Brume🦋","Fée", None, True, False, 90, 100, 100, False, 10)
+VoixEnjoleuse = Attaque("Voix Enjôleuse🦋","Fée", None, True, False, 80, 100, 100, False, 10)
 
-Ultralaser = Attaque("Ultralaser","Acier", None, True, False, 120, 100, 90, False, 5)
-Luminocanon = Attaque("Luminocanon","Acier", None, True, False, 90, 100, 100, False, 10)
-MurDeFer = Attaque("Mur de Fer","Acier", None, False, False, 0, 100, 100, False, 10,buff="defense")
-Puissance = Attaque("Puissance","Acier", None, False, False, 100, 100, 100, False, 10)
+Ultralaser = Attaque("Ultralaser🔩","Acier", None, True, False, 120, 100, 90, False, 5)
+Luminocanon = Attaque("Luminocanon🔩","Acier", None, True, False, 90, 100, 100, False, 10)
+MurDeFer = Attaque("Mur de Fer🔩","Acier", None, False, False, 0, 100, 100, False, 10,buff="defense")
+Puissance = Attaque("Puissance🔩","Acier", None, False, False, 100, 100, 100, False, 10)
 
-NoeudHerbe = Attaque("Nœud Herbe","Plante", None, False, False, 90, 100, 100, False, 10)
-BlablaDodo = Attaque("Blabla Dodo","Normal", "Comptine", False, False, 0, 100, 100, False, 15)
-BombeBeurk = Attaque("Bombe Beurk","Poison", None, False, False, 90, 100, 100, False, 10)
+NoeudHerbe = Attaque("Nœud Herbe🌱","Plante", None, False, False, 90, 100, 100, False, 10)
+BlablaDodo = Attaque("Blabla Dodo🔘","Normal", "Comptine", False, False, 0, 100, 100, False, 15)
+BombeBeurk = Attaque("Bombe Beurk🫐","Poison", None, False, False, 90, 100, 100, False, 10)
 
-Abime = Attaque("Abîme","Feu", None, True, False, 90, 100, 1000, False, 10)
-Surpuissance = Attaque("Surpuissance","Combat", None, False, False, 120, 100, 100, False, 10)
-CoudKrane = Attaque("Coud'Krâne","Combat", None, False, False, 80, 100, 100, False, 15)
-TacleFeu = Attaque("Tacle Feu","Feu", None, False, False, 65, 100, 95, False, 20)
+Abime = Attaque("Abîme🔥","Feu", None, True, False, 90, 100, 1000, False, 10)
+Surpuissance = Attaque("Surpuissance🥊","Combat", None, False, False, 120, 100, 100, False, 10)
+CoudKrane = Attaque("Coud'Krâne🥊","Combat", None, False, False, 80, 100, 100, False, 15)
+TacleFeu = Attaque("Tacle Feu🔥","Feu", None, False, False, 65, 100, 95, False, 20)
 
-DernierRecours = Attaque("Dernier Recours","Normal", None, False, False, 140, 100, 100, False, 5)
-VastePouvoir = Attaque("Vaste Pouvoir","Normal", None, True, False, 120, 100, 90, False, 10)
-Zenith = Attaque("Zénith","Feu", "Zénith", True, False, 0, 100, 100, False, 5)
+DernierRecours = Attaque("Dernier Recours🔘","Normal", None, False, False, 140, 100, 100, False, 5)
+VastePouvoir = Attaque("Vaste Pouvoir🔘","Normal", None, True, False, 120, 100, 90, False, 10)
+Zenith = Attaque("Zénith🔥","Feu", "Zénith", True, False, 0, 100, 100, False, 5)
 
-StridoSon = Attaque("Strido-Son","Feu", None, True, False, 70, 100, 100, False, 15)
-Boutefeu = Attaque("Boutefeu","Feu", None, True, False, 90, 100, 100, False, 10)
-Toxik = Attaque("Toxik","Poison","Poison", False, False, 0, 100, 100, False, 15)
-MurLumiere = Attaque("Mur Lumière","Normal", None, False, False, 0, 100, 100, False, 10,buff="defense")
+StridoSon = Attaque("Strido-Son🔥","Feu", None, True, False, 70, 100, 100, False, 15)
+Boutefeu = Attaque("Boutefeu🔥","Feu", None, True, False, 90, 100, 100, False, 10)
+MurLumiere = Attaque("Mur Lumière🔘","Normal", None, False, False, 0, 100, 100, False, 10,buff="defense")
 
-Charge = Attaque("Charge", "Normal", None, False, False, 40, 100, 100, False, 25)
-PoingGlace = Attaque("Poing-Glace","Glace",None, False, False, 65, 100, 100, False, 15)
-TeteDeFer = Attaque("Tête-De-Fer", "Acier", None, False, False, 80, 100, 80, False, 15)
-CarapacePsy = Attaque("Carapace Psy","Psy", "MG", True, False, 0, 100, 100, False, 20 ,buff="defense+defspe")
+Charge = Attaque("Charge🔘", "Normal", None, False, False, 40, 100, 100, False, 25)
+PoingGlace = Attaque("Poing-Glace❄️","Glace",None, False, False, 65, 100, 100, False, 15)
+TeteDeFer = Attaque("Tête-De-Fer🔩", "Acier", None, False, False, 80, 100, 80, False, 15)
+CarapacePsy = Attaque("Carapace Psy🧠","Psy", "MG", True, False, 0, 100, 100, False, 20 ,buff="defense+defspe")
 
-CoupDBoule = Attaque("Coup d'Boule","Normal", None, False, False, 70, 100, 100, False, 15)
-Armure = Attaque("Armure","Normal", "MG", True, False, 0, 100, 100, False, 20 ,buff="defense+defspe")
-Eboulement = Attaque("Eboulement","Roche","Paralysie", False, False, 75, 100, 90, False, 15)
-PistoletAO = Attaque("Pistolet à O","Eau", None, False, False, 40, 100, 100, False, 25)
+CoupDBoule = Attaque("Coup d'Boule🔘","Normal", None, False, False, 70, 100, 100, False, 15)
+Armure = Attaque("Armure🔘","Normal", "MG", True, False, 0, 100, 100, False, 20 ,buff="defense+defspe")
+Eboulement = Attaque("Eboulement🟫","Roche","Paralysie", False, False, 75, 100, 90, False, 15)
+PistoletAO = Attaque("Pistolet à O💧","Eau", None, False, False, 40, 100, 100, False, 25)
 
-EspritFrappeur=Attaque("Esprit Frappeur","Spectre",None,None,None,110,0,100,False,10)
+EspritFrappeur=Attaque("Esprit Frappeur👻","Spectre",None,None,None,110,0,100,False,10)
 
 
 Scorvilain = Pokemon(
-"Scovilain🔥🌱",
+"Scovilain🔥🌱  ",
 ("Feu","Plante"),
 65,
 75,
@@ -520,7 +541,7 @@ Scorvilain = Pokemon(
 
 
 Sorbouboul = Pokemon(
-"Sorbouboul❄️",
+"Sorbouboul❄️  ",
 ("Glace",),
 71,
 79,
@@ -537,7 +558,7 @@ Sorbouboul = Pokemon(
 )
 
 Kravarech = Pokemon(
-"Kravarech",
+"Kravarech 🐲💧  ",
 ("Dragon","Eau"),
 65,
 44,
@@ -550,11 +571,11 @@ Kravarech = Pokemon(
 90,
 97,
 123,
-[Toxic,Acidarmure,Ouragan,DracoMeteore]
+[Toxik,Acidarmure,Ouragan,DracoMeteore]
 )
 
 Farigiraf  = Pokemon(
-"Farigiraf ",
+"Farigiraf 🧠🔘  ",
 ("Psy","Normal"),
 120,
 60,
@@ -571,7 +592,7 @@ Farigiraf  = Pokemon(
 )
 
 PelageSablé  = Pokemon(
-"Pelage-Sablé ",
+"Pelage-Sablé 🟫⚡  ",
 ("Sol","Electrique"),
 85,
 101,
@@ -588,7 +609,7 @@ PelageSablé  = Pokemon(
 )
 
 Galvagon  = Pokemon(
-"Galvagon",
+"Galvagon 🐲⚡  ",
 ("Dragon","Electrique"),
 90,
 75,
@@ -605,7 +626,7 @@ Galvagon  = Pokemon(
 )
 
 Virevorreur  = Pokemon(
-"Virevorreur",
+"Virevorreur 🌱👻  ",
 ("Plante","Spectre"),
 55,
 90,
@@ -622,7 +643,7 @@ Virevorreur  = Pokemon(
 )
 
 Pomdorochi  = Pokemon(
-"Pomdorochi",
+"Pomdorochi 🐲🌱  ",
 ("Dragon","Plante"),
 106,
 44,
@@ -639,7 +660,7 @@ Pomdorochi  = Pokemon(
 )
 
 Sylveroy  = Pokemon(
-"Sylveroy",
+"Sylveroy 🧠🌱  ",
 ("Psy","Plante"),
 100 ,
 80,
@@ -656,7 +677,7 @@ Sylveroy  = Pokemon(
 )
 
 Amovenus  = Pokemon(
-"Amovénus",
+"Amovénus 🦋🪶  ",
 ("Fée","Vol"),
 74 ,
 106,
@@ -673,7 +694,7 @@ Amovenus  = Pokemon(
 )
 
 Pondralugon  = Pokemon(
-"Pondralugon",
+"Pondralugon 🔩🐲  ",
 ("Acier","Dragon"),
 90 ,
 85,
@@ -690,7 +711,7 @@ Pondralugon  = Pokemon(
 )
 
 Saquedeneu  = Pokemon(
-"Saquedeneu",
+"Saquedeneu 🌱  ",
 ("Plante",),
 65,
 60,
@@ -707,7 +728,7 @@ Saquedeneu  = Pokemon(
 )
 
 Chartor  = Pokemon(
-"Chartor",
+"Chartor 🔥  ",
 ("Feu",),
 70,
 20,
@@ -724,7 +745,7 @@ Chartor  = Pokemon(
 )
 
 Pierroteknik  = Pokemon(
-"Pierroteknik",
+"Pierroteknik 🔥👻  ",
 ("Feu","Spectre"),
 53,
 107,
@@ -741,7 +762,7 @@ Pierroteknik  = Pokemon(
 )
 
 MiteDeFer  = Pokemon(
-"Mite-de-Fer",
+"Mite-de-Fer 🔥🫐  ",
 ("Feu","Poison"),
 80,
 110,
@@ -758,7 +779,7 @@ MiteDeFer  = Pokemon(
 )
 
 Balbaleze = Pokemon(
-    "Balbalèze",
+    "Balbalèze ❄️  ",
     ("Glace",),
     170,
     73,
@@ -777,7 +798,7 @@ Balbaleze = Pokemon(
  
 
 IreFoudre = Pokemon(
-    "Ire-Foudre",
+    "Ire-Foudre ⚡  ",
     ("Electrique",),
     125,
     73,
@@ -796,7 +817,7 @@ IreFoudre = Pokemon(
  
 
 Bekaglacon = Pokemon(
-    "Békaglaçon",
+    "Békaglaçon ❄️  ",
     ("Glace",),
     75,
     50,
@@ -815,7 +836,7 @@ Bekaglacon = Pokemon(
  
 
 Pechaminus = Pokemon(
-    "Péchaminus",
+    "Péchaminus 🫐👻  ",
     ("Poison","Spectre",),
     88,
     88,
@@ -828,10 +849,10 @@ Pechaminus = Pokemon(
     160,
     88,
     88,
-    [Machination,Toxic,CarapacePsy,GazToxik]
+    [Machination,Toxik,CarapacePsy,GazToxik]
 )
 Tomberro = Pokemon(
-    "Tomberro",
+    "Tomberro 👻  ",
     ("Spectre",),
     72,
     68,
@@ -844,13 +865,13 @@ Tomberro = Pokemon(
     100,
     50,
     97,
-    [CoupDBoule,Toxic,CarapacePsy,Calinerie]
+    [CoupDBoule,Toxik,CarapacePsy,Calinerie]
 )
 
  
 
 Ferdeter = Pokemon(
-    "FerDeTer",
+    "FerDeTer 🔩  ",
     ("Acier",),
     70,
     65,
@@ -869,7 +890,7 @@ Ferdeter = Pokemon(
  
 
 Hydragla = Pokemon(
-    "Hydragla",
+    "Hydragla 💧  ",
     ("Eau",),
     90,
     55,
@@ -886,13 +907,13 @@ Hydragla = Pokemon(
 )
  
 Tutétékri=Pokemon(
-    "Tutétékri",
+    "Tutétékri 🟫👻  ",
     ("Sol","Spectre"),
     58,
     30,
     ("Insecte","Roche",),
     ("Poison",),
-    ("Plante","Spectre","Tenebre","Eau","Glace",),
+    ("Plante","Spectre","Ténèbre","Eau","Glace",),
     (),
     ("Electrique","Combat","Normal",),
     95,
@@ -905,8 +926,9 @@ Tutétékri=Pokemon(
 
 running=True
 while running==True :
-    choix=int(input("voulez vous : 1) Jouer  2) Quitter"))
-    if choix==1 :
+    choix=input("voulez vous : 1) Jouer  2) Quitter")
+
+    if choix=='1' :
         pokemons_dispo = [
         Scorvilain, Sorbouboul, Kravarech, Farigiraf, PelageSablé,
         Galvagon, Virevorreur, Pomdorochi, Sylveroy,
@@ -917,6 +939,10 @@ while running==True :
         main.cree_equipe(pokemons_dispo)
         main.choix_pokemon()
         main.main()
-    elif choix==2 :
-        running==False
+    elif choix=='2' :
+        une_derniere=input("Une dernière partie ?   1) Oui   2) Non")
+        if une_derniere!='1':
+            running=False
+    else:
+        print("Bien essayé")
         
