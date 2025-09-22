@@ -259,18 +259,13 @@ class Battle:
 
     def cree_equipe(self,pokemons_dispo):
         while len(self.equipe)<6:
-            taille_ligne=5
-            chunk=[pokemons_dispo[i:i+taille_ligne] for i in range (0,len(pokemons_dispo),taille_ligne)]
-            chunk_index=[[n for n in range (1,len(pokemons_dispo)+1)][i:i+taille_ligne] for i in range (0,len(pokemons_dispo),taille_ligne)]
-            poke_liste=f"""{[f"{chunk_index[0][i]} ){chunk[0][i].nom}" for i in range(0,taille_ligne)]}
-                        {[f"{chunk_index[1][i]} ){chunk[1][i].nom}" for i in range(0,taille_ligne)]}
-                        {[f"{chunk_index[2][i]} ){chunk[2][i].nom}" for i in range(0,taille_ligne)]}
-                        {[f"{chunk_index[3][i]} ){chunk[3][i].nom}" for i in range(0,taille_ligne)]}
-                        {[f"{chunk_index[4][i]} ){chunk[4][i].nom}" for i in range(0,taille_ligne-2)]}"""
-            poke_num=int(input(f"choisissez vos pokemons :{poke_liste}" ))
+            for i, poke in enumerate(pokemons_dispo, start=1):
+                print(f"{i}) {poke.nom}")
+            poke_num=int(input(f"choisissez vos pokemons :"))
+
             if poke_num in range (1,len(pokemons_dispo)+1):
                 self.equipe.append(copy.deepcopy(pokemons_dispo[poke_num-1]))
-                print('pokemon ajouté')
+                print(f'{pokemons_dispo[poke_num-1].nom} ajouté')
             else:
                 print('pokemon non disponible')
             
