@@ -182,7 +182,7 @@ class Degats:
 class Bot:
     def __init__(self,pokemons_dispo):
         self.equipe_bot=[]
-        for i in range (1) :
+        for i in range (6) :
             self.equipe_bot.append(copy.deepcopy(choice(pokemons_dispo)))
         self.poke_front_bot=self.equipe_bot[0]
         self.equipe_bot.remove(self.poke_front_bot)
@@ -258,9 +258,16 @@ class Battle:
         self.run=True
 
     def cree_equipe(self,pokemons_dispo):
-        while len(self.equipe)<1:
-            poke_num=int(input(f"choisissez vos pokemons :" 
-                        f"{[(i+1, pokemons_dispo[i].nom) for i in range (0,len(pokemons_dispo))]}"))
+        while len(self.equipe)<6:
+            taille_ligne=5
+            chunk=[pokemons_dispo[i:i+taille_ligne] for i in range (0,len(pokemons_dispo),taille_ligne)]
+            chunk_index=[[n for n in range (1,len(pokemons_dispo)+1)][i:i+taille_ligne] for i in range (0,len(pokemons_dispo),taille_ligne)]
+            poke_liste=f"""{[f"{chunk_index[0][i]} ){chunk[0][i].nom}" for i in range(0,taille_ligne)]}
+                        {[f"{chunk_index[1][i]} ){chunk[1][i].nom}" for i in range(0,taille_ligne)]}
+                        {[f"{chunk_index[2][i]} ){chunk[2][i].nom}" for i in range(0,taille_ligne)]}
+                        {[f"{chunk_index[3][i]} ){chunk[3][i].nom}" for i in range(0,taille_ligne)]}
+                        {[f"{chunk_index[4][i]} ){chunk[4][i].nom}" for i in range(0,taille_ligne-2)]}"""
+            poke_num=int(input(f"choisissez vos pokemons :{poke_liste}" ))
             if poke_num in range (1,len(pokemons_dispo)+1):
                 self.equipe.append(copy.deepcopy(pokemons_dispo[poke_num-1]))
                 print('pokemon ajouté')
@@ -368,15 +375,15 @@ class Battle:
             elif action == '2': 
                 objet_util=None
                 while objet_util==None:
-                    objet_util=input(f"Choisissez un objet : "
-                                  f"1) {self.objets[0].nom} | "
-                                  f"2) {self.objets[1].nom} | "
-                                  f"3) {self.objets[2].nom} | "
-                                  f"4) {self.objets[3].nom} | "
-                                  f"5) {self.objets[4].nom} | "
-                                  f"6) {self.objets[5].nom} | "
-                                  f"7) {self.objets[6].nom} | "
-                                  f"8) {self.objets[7].nom} : ")
+                    objet_util=input(f"""Choisissez un objet : 
+                                  1) {self.objets[0].nom} : {self.objets[0].nombre}
+                                  2) {self.objets[1].nom} : {self.objets[1].nombre}
+                                  3) {self.objets[2].nom} : {self.objets[2].nombre}
+                                  4) {self.objets[3].nom} : {self.objets[3].nombre}
+                                  5) {self.objets[4].nom} : {self.objets[4].nombre}
+                                  6) {self.objets[5].nom} : {self.objets[5].nombre}
+                                  7) {self.objets[6].nom} : {self.objets[6].nombre}
+                                  8) {self.objets[7].nom} : {self.objets[7].nombre} """)
                     
                     if objet_util not in (str(a)for a in range(1,len(self.objets)+1)):
                         objet_util=None
@@ -384,7 +391,8 @@ class Battle:
 
                     else:
                         self.objets[int(objet_util)-1].use()
-                return
+                        return
+                
 
 
             elif action == '3': 
@@ -400,7 +408,7 @@ class Battle:
                         self.poke_front = self.equipe[poke_change-1]
                         self.equipe.remove(self.poke_front)
                         print(f"Vous envoyez {self.poke_front.nom} !")
-                return
+                        return
 
             elif action == '4': 
                 print("Vous abandonnez...")
