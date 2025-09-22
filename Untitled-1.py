@@ -1,7 +1,10 @@
 import random
 from random import choice
 import copy
-
+import tkinter as tk
+from tkinter import Label
+from tkinter import PhotoImage
+import os
 
 class Pokemon():
     def __init__(self,nom,type,pv,vitesse,res,res2,faib,faib2,immu,attaque,defense,attspe,defspe,comp):
@@ -201,13 +204,13 @@ class Objet:
         self.nombre = nombre
 
     def use(self):
-        if self.nom not in ("Injection5G", "Glock", "Roulette Russe", "Armagedon", "Produits Dopants", "Eau", "Calmants Pour Ours", "Repos Long"):
+        if self.nom not in ("Injection5G", "Glock", "Roulette Russe", "Gambling Time", "Produits Dopants", "Eau", "Calmants Pour Ours", "Repos Long"):
             return
         if self.nombre > 1:
             self.nombre -= 1
             if self.nom == "Injection5G":
                 self.poke.statut = []
-                self('ILS NOUS CONTROLENT (votre pokemon perd tout ses effets)')
+                print('ILS NOUS CONTROLENT (votre pokemon perd tout ses effets)')
             elif self.nom == "Glock":
                 self.poke_adv.hp = 0
                 print(
@@ -221,15 +224,13 @@ class Objet:
                     self.poke_adv.pv = 0
                     print("тебе повезло")
 
-            elif self.nom == "Armagedon":
-                i = random.randint(1, 5)
-                for j in range(0, i):
-                    a = random.randint(1, 2)
-                    if a == 1:
-                        self.poke.pv = 0
-                    else:
-                        self.poke_adv.pv = 0
-                print("pourquoi ?")
+            elif self.nom == "Gambling Time":
+                i = random.randint(-20,20)
+                self.poke.pv+=i  
+                if i>=0:             
+                    print(f"Votre pokemon gagne {i}pv")
+                else :
+                    print(f"Votre pokemon perd {-i} pv")
             elif self.nom == "Produits Dopants":
                 self.poke.pv += 20
                 self.poke.attaque += 10
@@ -252,11 +253,88 @@ class Objet:
 
 
 class Battle:
-    def __init__(self,pokemons_dispo):
-        self.equipe=[]
-        self.poke_front=None
-        self.robot= Bot(pokemons_dispo)
+    def __init__(self, pokemons_dispo):
+        self.equipe = []
+        self.poke_front = None
+        self.robot = Bot(pokemons_dispo)
+        self.root = tk.Tk()
+        self.root.title("Combat Pokémon")
 
+        # dictionnaire de correspondance nom → fichier
+        noms_fichiers = {
+            "Scovillain🔥🌱": "scovillain.png",
+            "Sorbouboul❄️": "sorbouboul.png",
+            "Kravarech🐲💧": "kravarech.png",
+            "Farigiraf🧠🔘": "farigiraf.png",
+            "Pelage-Sablé🟫⚡": "pelagesable.png",
+            "Galvagon🐲⚡": "galvagon.png",
+            "Virevorreur🌱👻": "virevorreur.png",
+            "Pomdorochi🐲🌱": "pomdorochi.png",
+            "Sylveroy🧠🌱": "sylveroy.png",
+            "Amovénus🦋🪶": "amovenus.png",
+            "Pondralugon🔩🐲": "pondralugon.png",
+            "Saquedeneu🌱": "saquedeneu.png",
+            "Chartor🔥": "chartor.png",
+            "Pierroteknik🔥👻": "pierroteknik.png",
+            "Mite-de-Fer🔥🫐": "mitedefer.png",
+            "Balbalèze❄️": "balbaleze.png",
+            "Ire-Foudre⚡": "irefoudre.png",
+            "Békaglaçon❄️": "bekaglacon.png",
+            "Péchaminus🫐👻": "pechaminus.png",
+            "Tomberro👻": "tomberro.png",
+            "FerDeTer🔩": "ferdeter.png",
+            "Hydragla💧": "hydragla.png",
+            "Tutétékri🟫👻": "tutetekri.png",
+        }
+
+        self.canvas = tk.Frame(self.root, bg="black")
+        self.canvas.pack(fill="both", expand=True)
+
+        self.images = {}
+        dossier_images = "C:\\JEU\\images_pokemon"
+
+        # Chargement dynamique des images
+        for poke in pokemons_dispo:
+            fichier = noms_fichiers.get(poke.nom)
+            if fichier:
+                try:
+                    chemin = os.path.join(dossier_images, fichier)
+                    self.images[poke.nom] = PhotoImage(file=chemin)
+                    print(f"Image {poke.nom} chargée :", chemin)
+                except Exception as e:
+                    print(f"Erreur chargement image {poke.nom} :", e)
+                    self.images[poke.nom] = None
+            else:
+                self.images[poke.nom] = None
+
+        # Labels pour afficher les Pokémon
+        self.label_poke_joueur = Label(self.canvas, text="", font=("Arial", 14), fg="green", bg="black")
+        self.label_vs = Label(self.canvas, text=" VS ", font=("Arial", 20, "bold"), fg="red", bg="black")
+        self.label_poke_bot = Label(self.canvas, text="", font=("Arial", 14), fg="blue", bg="black")
+
+        self.label_poke_joueur.grid(row=0, column=0, padx=30, pady=20)
+        self.label_vs.grid(row=0, column=1, padx=30, pady=20)
+        self.label_poke_bot.grid(row=0, column=2, padx=30, pady=20)
+
+        self.label_img_joueur = Label(self.canvas, bg="black")
+        self.label_img_joueur.grid(row=1, column=0, padx=30, pady=10)
+
+        self.label_img_bot = Label(self.canvas, bg="black")
+        self.label_img_bot.grid(row=1, column=2, padx=30, pady=10)
+        
+
+    def update_gui(self):
+        if self.poke_front:
+            self.label_poke_joueur.config(text=f"{self.poke_front.nom}\nPV: {self.poke_front.pv}")
+            if self.images.get(self.poke_front.nom):
+                self.label_img_joueur.config(image=self.images[self.poke_front.nom])
+                self.label_img_joueur.image = self.images[self.poke_front.nom]  # obligatoire pour Tkinter
+        if self.robot.poke_front_bot:
+            self.label_poke_bot.config(text=f"{self.robot.poke_front_bot.nom}\nPV: {self.robot.poke_front_bot.pv}")
+            if self.images.get(self.robot.poke_front_bot.nom):
+                self.label_img_bot.config(image=self.images[self.robot.poke_front_bot.nom])
+                self.label_img_bot.image = self.images[self.robot.poke_front_bot.nom]
+        self.root.update_idletasks()
     def cree_equipe(self,pokemons_dispo):
         while len(self.equipe)<1:
             poke_num=int(input(f"choisissez vos pokemons :" 
@@ -309,6 +387,8 @@ class Battle:
             if deg != 0:   
                 defenseur.pv -= deg
                 print(f"{attaquant.nom} utilise {attaque.nom} ! Dégâts infligés : {deg}")
+            self.update_gui()
+                
 
 
     def tour(self):
@@ -330,19 +410,19 @@ class Battle:
             if action == 1:
                 choix=None
                 while choix==None:
-                    choix = int(input(f"Choisissez une attaque : "
+                    choix = input(f"Choisissez une attaque : "
                                     f"1) {self.poke_front.comp[0].nom} | "
                                     f"2) {self.poke_front.comp[1].nom} | "
                                     f"3) {self.poke_front.comp[2].nom} | "
-                                    f"4) {self.poke_front.comp[3].nom} : "))
+                                    f"4) {self.poke_front.comp[3].nom} : ")
                     
-                    if type(choix)!='int' or choix not in range (1,4):
+                    if choix not in (str(a)for a in range(1,len(self.poke_front.comp))):
                         choix=None
                         print("Entrez un chiffre entre 1 et 4")
 
                     else:
                         if self.poke_front.cant_attack==False:
-                            attaque_joueur = self.poke_front.comp[choix-1]
+                            attaque_joueur = self.poke_front.comp[int(choix)-1]
                         else:
                             print("vous ne pouvez pas")
 
@@ -369,7 +449,7 @@ class Battle:
             elif action == 2: 
                 objet_util=None
                 while objet_util==None:
-                    objet_util=int(input(f"Choisissez un objet : "
+                    objet_util=input(f"Choisissez un objet : "
                                   f"1) {self.objets[0].nom} | "
                                   f"2) {self.objets[1].nom} | "
                                   f"3) {self.objets[2].nom} | "
@@ -377,26 +457,26 @@ class Battle:
                                   f"5) {self.objets[4].nom} | "
                                   f"6) {self.objets[5].nom} | "
                                   f"7) {self.objets[6].nom} | "
-                                  f"8) {self.objets[7].nom} : "))
+                                  f"8) {self.objets[7].nom} : ")
                     
-                    if type(objet_util)!='int' or objet_util-1 not in range (0,7):
+                    if objet_util not in (str(a)for a in range(1,len(self.objets)+1)):
                         objet_util=None
                         print("Entrez un chiffre entre 1 et 8")
 
-                    elif self.objets[objet_util-1].nombre<1:
+                    elif self.objets[int(objet_util)-1].nombre<1:
                         objet_util=None
                         print("Vous n'avez plus cet objet")
 
                     else:
-                        self.objets[objet_util-1].use()
+                        self.objets[int(objet_util)-1].use()
 
 
             elif action == 3: 
                 poke_change=None
                 while poke_change==None:
-                    poke_change = int(input(f"Choisissez un Pokémon : {[i.nom for i in self.equipe]} : "))
+                    poke_change = input(f"Choisissez un Pokémon : {[i.nom for i in self.equipe]} : ")
 
-                    if type(poke_change)!='int' or poke_change not in range (1,len(self.equipe)):
+                    if objet_util not in (str(a)for a in range(1,len(self.equipe))):
                         print(f"Entrez un chiffre entre 1 et {len(self.equipe)}")
                         poke_change=None
                     else:
@@ -412,26 +492,38 @@ class Battle:
                 return
 
     def main(self):
+
         Injection5G = Objet("Injection5G", self.equipe,self.robot.equipe_bot,self.poke_front,self.robot.poke_front_bot,3)
         Glock = Objet("Glock", self.equipe,self.robot.equipe_bot,self.poke_front,self.robot.poke_front_bot,1)
         RouletteRusse = Objet("Roulette Russe", self.equipe,self.robot.equipe_bot,self.poke_front,self.robot.poke_front_bot,5)
-        Armagedon = Objet("Armagedon", self.equipe,self.robot.equipe_bot,self.poke_front,self.robot.poke_front_bot,1)
+        GamblingTime = Objet("Gambling Time", self.equipe,self.robot.equipe_bot,self.poke_front,self.robot.poke_front_bot,1)
         ProduitsDopants = Objet("Produits Dopants", self.equipe,self.robot.equipe_bot,self.poke_front,self.robot.poke_front_bot,3)
         Eau = Objet("Eau", self.equipe,self.robot.equipe_bot,self.poke_front,self.robot.poke_front_bot,3)
         CalmantsPourOurs = Objet("Calmants Pour Ours", self.equipe,self.robot.equipe_bot,self.poke_front,self.robot.poke_front_bot,2)
         ReposLong = Objet("Repos Long", self.equipe,self.robot.equipe_bot,self.poke_front,self.robot.poke_front_bot,4)
-        self.objets = [Injection5G,Glock,RouletteRusse,Armagedon,ProduitsDopants,Eau,CalmantsPourOurs,ReposLong]
+        self.objets = [Injection5G,Glock,RouletteRusse,GamblingTime,ProduitsDopants,Eau,CalmantsPourOurs,ReposLong]
 
-        while True:
-            if (self.equipe == [] and self.poke_front is None) or (self.poke_front and self.poke_front.pv <= 0):
-                print("Vous avez perdu (la honte)")
-                return
 
-            if (self.robot.equipe_bot == [] and self.robot.poke_front_bot is None) or (self.robot.poke_front_bot and self.robot.poke_front_bot.pv <= 0):
-                print("Bravo, vous avez gagné (heureusement, c'est un bot)")
-                return
+        self.root.after(100, self.boucle_de_jeu)
+        self.root.mainloop()
+    def boucle_de_jeu(self):
+        # Vérif défaite
+        if (self.equipe == [] and self.poke_front is None) or (self.poke_front and self.poke_front.pv <= 0):
+            print("Vous avez perdu (la honte)")
+            self.root.quit()
+            return
 
-            self.tour()
+        # Vérif victoire
+        if (self.robot.equipe_bot == [] and self.robot.poke_front_bot is None) or (self.robot.poke_front_bot and self.robot.poke_front_bot.pv <= 0):
+            print("Bravo, vous avez gagné (heureusement, c'est un bot)")
+            self.root.quit()
+            return
+
+        # sinon : jouer un tour
+        self.tour()
+
+        # replanifier la suite
+        self.root.after(100, self.boucle_de_jeu)
 
 
 # ajouter : proba,precision,prio,PP
@@ -521,8 +613,8 @@ PistoletAO = Attaque("Pistolet à O💧","Eau", None, False, False, 40, 100, 100
 EspritFrappeur=Attaque("Esprit Frappeur👻","Spectre",None,None,None,110,0,100,False,10)
 
 
-Scorvilain = Pokemon(
-"Scovilain🔥🌱  ",
+Scovillain = Pokemon(
+"Scovillain🔥🌱",
 ("Feu","Plante"),
 65,
 75,
@@ -541,7 +633,7 @@ Scorvilain = Pokemon(
 
 
 Sorbouboul = Pokemon(
-"Sorbouboul❄️  ",
+"Sorbouboul❄️",
 ("Glace",),
 71,
 79,
@@ -558,7 +650,7 @@ Sorbouboul = Pokemon(
 )
 
 Kravarech = Pokemon(
-"Kravarech 🐲💧  ",
+"Kravarech 🐲💧",
 ("Dragon","Eau"),
 65,
 44,
@@ -575,7 +667,7 @@ Kravarech = Pokemon(
 )
 
 Farigiraf  = Pokemon(
-"Farigiraf 🧠🔘  ",
+"Farigiraf 🧠🔘",
 ("Psy","Normal"),
 120,
 60,
@@ -592,7 +684,7 @@ Farigiraf  = Pokemon(
 )
 
 PelageSablé  = Pokemon(
-"Pelage-Sablé 🟫⚡  ",
+"Pelage-Sablé🟫⚡",
 ("Sol","Electrique"),
 85,
 101,
@@ -609,7 +701,7 @@ PelageSablé  = Pokemon(
 )
 
 Galvagon  = Pokemon(
-"Galvagon 🐲⚡  ",
+"Galvagon🐲⚡",
 ("Dragon","Electrique"),
 90,
 75,
@@ -626,7 +718,7 @@ Galvagon  = Pokemon(
 )
 
 Virevorreur  = Pokemon(
-"Virevorreur 🌱👻  ",
+"Virevorreur🌱👻",
 ("Plante","Spectre"),
 55,
 90,
@@ -643,7 +735,7 @@ Virevorreur  = Pokemon(
 )
 
 Pomdorochi  = Pokemon(
-"Pomdorochi 🐲🌱  ",
+"Pomdorochi🐲🌱",
 ("Dragon","Plante"),
 106,
 44,
@@ -660,7 +752,7 @@ Pomdorochi  = Pokemon(
 )
 
 Sylveroy  = Pokemon(
-"Sylveroy 🧠🌱  ",
+"Sylveroy🧠🌱",
 ("Psy","Plante"),
 100 ,
 80,
@@ -677,7 +769,7 @@ Sylveroy  = Pokemon(
 )
 
 Amovenus  = Pokemon(
-"Amovénus 🦋🪶  ",
+"Amovénus🦋🪶",
 ("Fée","Vol"),
 74 ,
 106,
@@ -694,7 +786,7 @@ Amovenus  = Pokemon(
 )
 
 Pondralugon  = Pokemon(
-"Pondralugon 🔩🐲  ",
+"Pondralugon🔩🐲",
 ("Acier","Dragon"),
 90 ,
 85,
@@ -711,7 +803,7 @@ Pondralugon  = Pokemon(
 )
 
 Saquedeneu  = Pokemon(
-"Saquedeneu 🌱  ",
+"Saquedeneu🌱",
 ("Plante",),
 65,
 60,
@@ -728,7 +820,7 @@ Saquedeneu  = Pokemon(
 )
 
 Chartor  = Pokemon(
-"Chartor 🔥  ",
+"Chartor🔥",
 ("Feu",),
 70,
 20,
@@ -745,7 +837,7 @@ Chartor  = Pokemon(
 )
 
 Pierroteknik  = Pokemon(
-"Pierroteknik 🔥👻  ",
+"Pierroteknik🔥👻",
 ("Feu","Spectre"),
 53,
 107,
@@ -762,7 +854,7 @@ Pierroteknik  = Pokemon(
 )
 
 MiteDeFer  = Pokemon(
-"Mite-de-Fer 🔥🫐  ",
+"Mite-de-Fer🔥🫐",
 ("Feu","Poison"),
 80,
 110,
@@ -779,7 +871,7 @@ MiteDeFer  = Pokemon(
 )
 
 Balbaleze = Pokemon(
-    "Balbalèze ❄️  ",
+    "Balbalèze❄️",
     ("Glace",),
     170,
     73,
@@ -798,7 +890,7 @@ Balbaleze = Pokemon(
  
 
 IreFoudre = Pokemon(
-    "Ire-Foudre ⚡  ",
+    "Ire-Foudre⚡",
     ("Electrique",),
     125,
     73,
@@ -817,7 +909,7 @@ IreFoudre = Pokemon(
  
 
 Bekaglacon = Pokemon(
-    "Békaglaçon ❄️  ",
+    "Békaglaçon❄️",
     ("Glace",),
     75,
     50,
@@ -836,7 +928,7 @@ Bekaglacon = Pokemon(
  
 
 Pechaminus = Pokemon(
-    "Péchaminus 🫐👻  ",
+    "Péchaminus🫐👻",
     ("Poison","Spectre",),
     88,
     88,
@@ -852,7 +944,7 @@ Pechaminus = Pokemon(
     [Machination,Toxik,CarapacePsy,GazToxik]
 )
 Tomberro = Pokemon(
-    "Tomberro 👻  ",
+    "Tomberro👻",
     ("Spectre",),
     72,
     68,
@@ -871,7 +963,7 @@ Tomberro = Pokemon(
  
 
 Ferdeter = Pokemon(
-    "FerDeTer 🔩  ",
+    "FerDeTer🔩",
     ("Acier",),
     70,
     65,
@@ -890,7 +982,7 @@ Ferdeter = Pokemon(
  
 
 Hydragla = Pokemon(
-    "Hydragla 💧  ",
+    "Hydragla💧",
     ("Eau",),
     90,
     55,
@@ -907,7 +999,7 @@ Hydragla = Pokemon(
 )
  
 Tutétékri=Pokemon(
-    "Tutétékri 🟫👻  ",
+    "Tutétékri🟫👻",
     ("Sol","Spectre"),
     58,
     30,
@@ -930,7 +1022,7 @@ while running==True :
 
     if choix=='1' :
         pokemons_dispo = [
-        Scorvilain, Sorbouboul, Kravarech, Farigiraf, PelageSablé,
+        Scovillain, Sorbouboul, Kravarech, Farigiraf, PelageSablé,
         Galvagon, Virevorreur, Pomdorochi, Sylveroy,
         Amovenus, Pondralugon, Saquedeneu, Chartor, Pierroteknik, MiteDeFer,
         Hydragla,Ferdeter,Tomberro ,Pechaminus ,Bekaglacon ,IreFoudre ,Balbaleze ,Tutétékri
