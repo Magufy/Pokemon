@@ -4,7 +4,7 @@ from Tour import Battle
 
 running=True
 while running==True :
-    choix=input("\033[1;33 voulez vous : 1) Jouer  2) Quitter \033[0m")
+    choix=input("\033[1;33m voulez vous : 1) Jouer  2) Quitter \033[0m")
 
     if choix=='1' :
         pokemons_dispo = [
@@ -18,9 +18,9 @@ while running==True :
         main.choix_pokemon()
         main.main()
     elif choix=='2' :
-        une_derniere=input("\033[1;36 Une dernière partie ?   1) Oui   2) Non \033[0m")
+        une_derniere=input("\033[1;36m Une dernière partie ?   1) Oui   2) Non \033[0m")
         if une_derniere!='1':
             running=False
     else:
-        print("\033[1;36 Bien essayé \033[0m")
+        print("\033[1;36m Bien essayé \033[0m")
         
