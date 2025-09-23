@@ -11,7 +11,7 @@ while running==True :
         Scovillain, Sorbouboul, Kravarech, Farigiraf, PelageSablé,
         Galvagon, Virevorreur, Pomdorochi, Sylveroy,
         Amovenus, Pondralugon, Saquedeneu, Chartor, Pierroteknik, MiteDeFer,
-        Hydragla,Ferdeter,Tomberro ,Pechaminus ,Bekaglacon ,IreFoudre ,Balbaleze ,Tutétékri
+        Hydragla,Ferdeter,Tomberro ,Pechaminus ,Bekaglacon ,IreFoudre ,Balbaleze ,Tutétékri,Francois
         ]   
         main=Battle(pokemons_dispo)
         main.cree_equipe(pokemons_dispo)
