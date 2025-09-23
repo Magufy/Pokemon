@@ -124,7 +124,7 @@ class Battle:
     def mort_poke_front(self):
         if self.poke_front.pv<=0 : 
             if self.equipe==[]:
-                print("Vous avez perdu (la honte)")
+                print("\033[1;31m Vous avez perdu (la honte)\033[0m")
                 self.run=False
                 return
             self.poke_front=None
@@ -132,6 +132,11 @@ class Battle:
     def executer_attaque(self, attaquant, defenseur, attaque):
         self.update_gui()
         self.root.update()
+        couleur=None
+        if attaquant==self.robot.poke_front_bot:
+            couleur="\033[1;31m "
+        else :
+            couleur="\033[1;34m "
         if attaque==None:
             return
                # buff
@@ -139,22 +144,22 @@ class Battle:
             attaquant.buffs.append(attaque.buff)
             if attaque.buff == "defense":
                 print( 
-                    f"{attaquant.nom} utilise {attaque.nom} ! Sa Défense augmente fortement !")
+                    couleur + f"{attaquant.nom} utilise {attaque.nom} ! Sa Défense augmente fortement !\033[0m")
 
             elif attaque.buff == "attspe":
                 print( 
-                    f"{attaquant.nom} utilise {attaque.nom} ! Son Attaque Spéciale augmente fortement !")
+                    couleur + f"{attaquant.nom} utilise {attaque.nom} ! Son Attaque Spéciale augmente fortement !\033[0m")
             elif attaque.buff == "defense+defspe":
                 print(
-                    f"{attaquant.nom} utilise {attaque.nom} ! Sa Défense et Défense Spéciale augmentent !")
+                    couleur + f"{attaquant.nom} utilise {attaque.nom} ! Sa Défense et Défense Spéciale augmentent !\033[0m")
             elif attaque.buff == "rage":
                 print(
-                    f"{attaquant.nom} est pris de rage ! Son Attaque augmente énormément mais sa Défense baisse !")
+                    couleur + f"{attaquant.nom} est pris de rage ! Son Attaque augmente énormément mais sa Défense baisse !\033[0m")
         # statut
         elif attaque.statut:
             defenseur.statut.append(attaque.statut)
             print(
-                f"{attaquant.nom} utilise {attaque.nom} ! {defenseur.nom} est affecté par {attaque.statut} !")
+                couleur + f"{attaquant.nom} utilise {attaque.nom} ! {defenseur.nom} est affecté par {attaque.statut} !\033[0m")
 
         else:
             # attaquedebase
@@ -162,7 +167,7 @@ class Battle:
             
             if deg != 0:   
                 defenseur.pv -= deg
-                print(f"{attaquant.nom} utilise {attaque.nom} ! Dégâts infligés : {deg}")
+                print(couleur + f"{attaquant.nom} utilise {attaque.nom} ! Dégâts infligés : {deg}\033[0m")
             
         self.update_gui()
         self.root.update()
@@ -182,7 +187,7 @@ class Battle:
             self.bot_sent = True  
         action = None
         while action is None:
-            action = input("Choisissez une action : 1) Attaquer , 2) Objet , 3) Changer , 4) Capituler : ")
+            action = input("\033[1;32m Choisissez une action : 1) Attaquer , 2) Objet , 3) Changer , 4) Capituler : \033[0m")
             
             if action == '1':
                 choix=None
