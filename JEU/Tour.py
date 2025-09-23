@@ -113,13 +113,13 @@ class Battle:
             else:
                 print('pokemon non disponible')
             
-    def choix_pokemon(self)-> None:
+    def choix_pokemon(self):
         while self.poke_front==None:
-            poke=int(input(
-                f"choisissez un pokemon a envoyer au combat{[i.nom for i in self.equipe]}"))
-            if poke in range (1,len(self.equipe)+1):
-                self.poke_front=self.equipe[poke-1]
-                self.equipe.remove(self.equipe[poke-1])
+            poke=input(
+                f"choisissez un pokemon a envoyer au combat{[i.nom for i in self.equipe]}")
+            if poke in (str(i) for i in range (1,len(self.equipe)+1)):
+                self.poke_front=self.equipe[int(poke)-1]
+                self.equipe.remove(self.equipe[int(poke)-1])
 
     def mort_poke_front(self)-> None:
         if self.poke_front.pv<=0 : 
@@ -361,6 +361,7 @@ class Battle:
         self.root.update()
 
         self.root.after(100, self.boucle_de_jeu)
+
 
 
 
