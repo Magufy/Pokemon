@@ -1,5 +1,4 @@
 import random
-from random import choice
 import copy
 import tkinter as tk
 from tkinter import Label
@@ -186,12 +185,12 @@ class Bot:
     def __init__(self,pokemons_dispo):
         self.equipe_bot=[]
         for i in range (6) :
-            self.equipe_bot.append(copy.deepcopy(choice(pokemons_dispo)))
+            self.equipe_bot.append(copy.deepcopy(random.choice(pokemons_dispo)))
         self.poke_front_bot=self.equipe_bot[0]
         self.equipe_bot.remove(self.poke_front_bot)
 
     def choix_pokemon_bot(self):
-        self.poke_front_bot = copy.deepcopy(choice(self.equipe_bot))
+        self.poke_front_bot = copy.deepcopy(random.choice(self.equipe_bot))
         self.equipe_bot.remove(self.poke_front_bot)
 
 class Objet:
@@ -265,29 +264,29 @@ class Battle:
 
         # dictionnaire de correspondance nom → fichier
         noms_fichiers = {
-            "Scovillain 🔥🌱  ": "scovillain.png",
-            "Sorbouboul ❄️  ": "sorbouboul.png",
-            "Kravarech 🐲💧  ": "kravarech.png",
-            "Farigiraf 🧠🔘  ": "farigiraf.png",
-            "Pelage-Sablé 🟫⚡  ": "pelagesable.png",
-            "Galvagon 🐲⚡": "galvagon.png",
-            "Virevorreur 🌱👻  ": "virevorreur.png",
-            "Pomdorochi 🐲🌱  ": "pomdorochi.png",
-            "Sylveroy 🧠🌱  ": "sylveroy.png",
-            "Amovénus 🦋🪶  ": "amovenus.png",
-            "Pondralugon 🔩🐲  ": "pondralugon.png",
-            "Saquedeneu 🌱  ": "saquedeneu.png",
-            "Chartor 🔥  ": "chartor.png",
-            "Pierroteknik 🔥👻  ": "pierroteknik.png",
-            "Mite-de-Fer 🔥🫐  ": "mitedefer.png",
-            "Balbalèze ❄️  ": "balbaleze.png",
-            "Ire-Foudre ⚡  ": "irefoudre.png",
-            "Békaglaçon ❄️  ": "bekaglacon.png",
-            "Péchaminus 🫐👻  ": "pechaminus.png",
-            "Tomberro 👻  ": "tomberro.png",
-            "FerDeTer 🔩  ": "ferdeter.png",
-            "Hydragla 💧  ": "hydragla.png",
-            "Tutétékri 🟫👻  ": "tutetekri.png",
+            "Scovillain🔥🌱": "scovillain.png",
+            "Sorbouboul❄️": "sorbouboul.png",
+            "Kravarech🐲💧": "kravarech.png",
+            "Farigiraf🧠🔘": "farigiraf.png",
+            "Pelage-Sablé🟫⚡": "pelagesable.png",
+            "Galvagon🐲⚡": "galvagon.png",
+            "Virevorreur🌱👻": "virevorreur.png",
+            "Pomdorochi🐲🌱": "pomdorochi.png",
+            "Sylveroy🧠🌱": "sylveroy.png",
+            "Amovénus🦋🪶": "amovenus.png",
+            "Pondralugon🔩🐲": "pondralugon.png",
+            "Saquedeneu🌱": "saquedeneu.png",
+            "Chartor🔥": "chartor.png",
+            "Pierroteknik🔥👻": "pierroteknik.png",
+            "Mite-de-Fer🔥🫐": "mitedefer.png",
+            "Balbalèze❄️": "balbaleze.png",
+            "Ire-Foudre⚡": "irefoudre.png",
+            "Békaglaçon❄️": "bekaglacon.png",
+            "Péchaminus🫐👻": "pechaminus.png",
+            "Tomberro👻": "tomberro.png",
+            "FerDeTer🔩": "ferdeter.png",
+            "Hydragla💧": "hydragla.png",
+            "Tutétékri🟫👻": "tutetekri.png",
         }
 
         self.canvas = tk.Frame(self.root, bg="black")
@@ -338,15 +337,16 @@ class Battle:
                 self.label_img_bot.config(image=self.images[self.robot.poke_front_bot.nom])
                 self.label_img_bot.image = self.images[self.robot.poke_front_bot.nom]
         self.root.update_idletasks()
+
     def cree_equipe(self,pokemons_dispo):
         while len(self.equipe)<6:
             for i, poke in enumerate(pokemons_dispo, start=1):
                 print(f"{i}) {poke.nom}")
-            poke_num=int(input(f"choisissez vos pokemons :"))
+            poke_num=input(f"choisissez vos pokemons :")
 
-            if poke_num in range (1,len(pokemons_dispo)+1):
-                self.equipe.append(copy.deepcopy(pokemons_dispo[poke_num-1]))
-                print(f'{pokemons_dispo[poke_num-1].nom} ajouté')
+            if poke_num in (str(i) for i in range(1,len(pokemons_dispo)+1)):
+                self.equipe.append(copy.deepcopy(pokemons_dispo[int(poke_num)-1]))
+                print(f'{pokemons_dispo[int(poke_num)-1].nom} ajouté')
             else:
                 print('pokemon non disponible')
             
@@ -427,29 +427,12 @@ class Battle:
                             attaque_joueur = self.poke_front.comp[int(choix)-1]
                         else:
                             print("Vous ne pouvez pas")
+                            attaque_joueur = None
 
-
-                        if self.robot.poke_front_bot and self.robot.poke_front_bot.pv > 0 and self.robot.poke_front_bot.cant_attack==False :
-                            attaque_bot = choice(self.robot.poke_front_bot.comp)
-
-
-                        if self.poke_front.vitesse >= (self.robot.poke_front_bot.vitesse if self.robot.poke_front_bot else 0):
-                            self.executer_attaque(self.poke_front, self.robot.poke_front_bot, attaque_joueur)
-
-                            if self.robot.poke_front_bot and self.robot.poke_front_bot.pv > 0 and self.robot.poke_front_bot.cant_attack==False:
-                                print(f"Bot : {self.robot.poke_front_bot.nom}, utilise {attaque_bot.nom} !")
-                                self.executer_attaque(self.robot.poke_front_bot, self.poke_front, attaque_bot)
-
-                        else:
-                            if self.robot.poke_front_bot and self.robot.poke_front_bot.pv > 0 and self.robot.poke_front_bot.cant_attack==False:
-                                print(f"Bot : {self.robot.poke_front_bot.nom}, utilise {attaque_bot.nom} !")
-                                self.executer_attaque(self.robot.poke_front_bot, self.poke_front, attaque_bot)
-
-                            if self.poke_front.pv > 0:
-                                self.executer_attaque(self.poke_front, self.robot.poke_front_bot, attaque_joueur)
 
             elif action == '2': 
                 objet_util=None
+                attaque_joueur=None
                 while objet_util==None:
                     objet_util=input(f"""Choisissez un objet : 
                                   1) {self.objets[0].nom} : {self.objets[0].nombre}
@@ -467,15 +450,17 @@ class Battle:
 
                     else:
                         self.objets[int(objet_util)-1].use()
-                        return
+  
+                
 
 
             elif action == '3': 
                 poke_change=None
+                attaque_joueur=None
                 while poke_change==None:
                     poke_change = input(f"Choisissez un Pokémon : {[i.nom for i in self.equipe]} : ")
 
-                    if objet_util not in (str(a)for a in range(1,len(self.equipe))):
+                    if objet_util not in range(1, len(self.equipe)):
                         print(f"Entrez un chiffre entre 1 et {len(self.equipe)}")
                         poke_change=None
                     else:
@@ -483,17 +468,75 @@ class Battle:
                         self.poke_front = self.equipe[poke_change-1]
                         self.equipe.remove(self.poke_front)
                         print(f"Vous envoyez {self.poke_front.nom} !")
-                        return
+   
 
             elif action == '4': 
                 print("Vous abandonnez...")
                 self.run=False
-                return
+
         
             else:
                 print("Entrez un chiffre entre 1 et 4")
                 action=None
-                return
+
+            
+            
+        #Tour du bot :
+
+        if self.robot.poke_front_bot.pv <= 20:
+            tour_bot = random.choice(["Change", "Objet"])
+        elif self.robot.poke_front_bot.pv < 50:
+            tour_bot = random.choice(["Change"] + ["Attaque"] * 4)
+        else:
+            tour_bot = random.choice(["Change"] + ["Objet"] * 5 + ["Attaque"] * 10)
+
+
+    
+        if tour_bot=="Change":
+            self.robot.choix_pokemon_bot()
+
+        elif tour_bot=="Objet":
+            objet_util=None
+            while objet_util==None:
+                objet_util=random.choice(self.objets_bot)
+                if objet_util.nombre>0:
+                    objet_util.use()
+                else:
+                    objet_util=None
+
+            if objet_util.nombre>0:
+                objet_util.use()
+                
+                
+        elif tour_bot=="Attaque":
+            if self.robot.poke_front_bot and self.robot.poke_front_bot.pv > 0 and self.robot.poke_front_bot.cant_attack==False :
+                attaque_bot = random.choice(self.robot.poke_front_bot.comp)
+            else:
+                attaque_bot=None
+        else:
+            attaque_bot=None
+
+        #Si l'un n'attaque pas
+        if attaque_joueur==None:
+            self.executer_attaque(self.robot.poke_front_bot, self.poke_front, attaque_bot)
+        elif attaque_bot==None:
+            self.executer_attaque(self.poke_front, self.robot.poke_front_bot, attaque_joueur)
+
+        elif self.poke_front.vitesse >= (self.robot.poke_front_bot.vitesse if self.robot.poke_front_bot else 0):
+            self.executer_attaque(self.poke_front, self.robot.poke_front_bot, attaque_joueur)
+
+            if self.robot.poke_front_bot and self.robot.poke_front_bot.pv > 0 and self.robot.poke_front_bot.cant_attack==False:
+                print(f"Bot : {self.robot.poke_front_bot.nom}, utilise {attaque_bot.nom} !")
+                self.executer_attaque(self.robot.poke_front_bot, self.poke_front, attaque_bot)
+
+        else:
+            if self.robot.poke_front_bot and self.robot.poke_front_bot.pv > 0 and self.robot.poke_front_bot.cant_attack==False:
+                print(f"Bot : {self.robot.poke_front_bot.nom}, utilise {attaque_bot.nom} !")
+                self.executer_attaque(self.robot.poke_front_bot, self.poke_front, attaque_bot)
+
+            if self.poke_front.pv > 0 :
+                self.executer_attaque(self.poke_front, self.robot.poke_front_bot, attaque_joueur)
+            
 
     def main(self):
         Injection5G = Objet("Injection5G", self.equipe,self.robot.equipe_bot,self.poke_front,self.robot.poke_front_bot,3)
@@ -506,28 +549,40 @@ class Battle:
         ReposLong = Objet("Repos Long", self.equipe,self.robot.equipe_bot,self.poke_front,self.robot.poke_front_bot,4)
         self.objets = [Injection5G,Glock,RouletteRusse,GamblingTime,ProduitsDopants,Eau,CalmantsPourOurs,ReposLong]
 
+        Injection5G_bot = Objet("Injection5G", self.robot.equipe_bot,self.equipe,self.robot.poke_front_bot,self.poke_front,3)
+        Glock_bot = Objet("Glock", self.robot.equipe_bot,self.equipe,self.robot.poke_front_bot,self.poke_front,3)
+        RouletteRusse_bot = Objet("Roulette Russe", self.robot.equipe_bot,self.equipe,self.robot.poke_front_bot,self.poke_front,3)
+        GamblingTime_bot = Objet("Gambling Time", self.robot.equipe_bot,self.equipe,self.robot.poke_front_bot,self.poke_front,3)
+        ProduitsDopants_bot = Objet("Produits Dopants", self.robot.equipe_bot,self.equipe,self.robot.poke_front_bot,self.poke_front,3)
+        Eau_bot = Objet("Eau", self.robot.equipe_bot,self.equipe,self.robot.poke_front_bot,self.poke_front,3)
+        CalmantsPourOurs_bot = Objet("Calmants Pour Ours", self.robot.equipe_bot,self.equipe,self.robot.poke_front_bot,self.poke_front,3)
+        ReposLong_bot = Objet("Repos Long", self.robot.equipe_bot,self.equipe,self.robot.poke_front_bot,self.poke_front,3)
+        self.objets_bot = [Injection5G_bot,Glock_bot,RouletteRusse_bot,GamblingTime_bot,ProduitsDopants_bot,Eau_bot,CalmantsPourOurs_bot,ReposLong_bot]
 
         self.root.after(100, self.boucle_de_jeu)
         self.root.mainloop()
+
     def boucle_de_jeu(self):
-        # Vérif défaite
-        if (self.equipe == [] and self.poke_front is None) or (self.poke_front and self.poke_front.pv <= 0):
-            print("Vous avez perdu (la honte)")
-            self.root.quit()
+        if self.run==True:
+            # Vérif défaite
+            if (self.equipe == [] and self.poke_front is None) or (self.poke_front and self.poke_front.pv <= 0):
+                print("Vous avez perdu (la honte)")
+                self.root.quit()
+                return
+
+            # Vérif victoire
+            if (self.robot.equipe_bot == [] and self.robot.poke_front_bot is None) or (self.robot.poke_front_bot and self.robot.poke_front_bot.pv <= 0):
+                print("Bravo, vous avez gagné (heureusement, c'est un bot)")
+                self.root.quit()
+                return
+
+            # sinon : jouer un tour
+            self.tour()
+
+            # replanifier la suite
+            self.root.after(100, self.boucle_de_jeu)
+        else:
             return
-
-        # Vérif victoire
-        if (self.robot.equipe_bot == [] and self.robot.poke_front_bot is None) or (self.robot.poke_front_bot and self.robot.poke_front_bot.pv <= 0):
-            print("Bravo, vous avez gagné (heureusement, c'est un bot)")
-            self.root.quit()
-            return
-
-        # sinon : jouer un tour
-        self.tour()
-
-        # replanifier la suite
-        self.root.after(100, self.boucle_de_jeu)
-
 
 # ajouter : proba,precision,prio,PP
 
@@ -617,7 +672,7 @@ EspritFrappeur=Attaque("Esprit Frappeur👻","Spectre",None,None,None,110,0,100,
 
 
 Scovillain = Pokemon(
-"Scovillain 🔥🌱  ",
+"Scovillain🔥🌱  ",
 ("Feu","Plante"),
 65,
 75,
@@ -636,7 +691,7 @@ Scovillain = Pokemon(
 
 
 Sorbouboul = Pokemon(
-"Sorbouboul ❄️  ",
+"Sorbouboul❄️  ",
 ("Glace",),
 71,
 79,
@@ -1040,4 +1095,4 @@ while running==True :
             running=False
     else:
         print("Bien essayé")
-
+        
