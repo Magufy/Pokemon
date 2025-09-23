@@ -54,15 +54,13 @@ class Degats:
             Crit= 1.4 
         else:
             Crit= 1
-        
-        Obj=1  #pass
 
         Mod_terrain=0
         if self.attaque.statut=="Pluie":
             if self.attaque.type=="Eau":
                 Mod_terrain+=0.5   # Aucune de nos attaque affectée par danse pluie donc delire de l'artiste
 
-        CM = STAB * Type * Crit * Obj * random.uniform(0.85,1) + Mod_terrain
+        CM = STAB * Type * Crit * random.uniform(0.85,1) + Mod_terrain
         Compensateur_Niveaux = 4
         Degats=((((Att*Pui)/Def)/50)+2)*CM*Compensateur_Niveaux
 
@@ -77,6 +75,7 @@ class Degats:
                 self.poke_att.buffs.append(self.attaque.buff)
 
         return int(Degats)
+
 
 
 
