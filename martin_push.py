@@ -259,33 +259,35 @@ class Battle:
         self.poke_front=None
         self.robot= Bot(pokemons_dispo)
         self.run=True
+        self.root = tk.Tk()
+        self.root.title("Combat Pokémon")
 
 
         # dictionnaire de correspondance nom → fichier
         noms_fichiers = {
-            "Scovillain🔥🌱": "scovillain.png",
-            "Sorbouboul❄️": "sorbouboul.png",
-            "Kravarech🐲💧": "kravarech.png",
-            "Farigiraf🧠🔘": "farigiraf.png",
-            "Pelage-Sablé🟫⚡": "pelagesable.png",
-            "Galvagon🐲⚡": "galvagon.png",
-            "Virevorreur🌱👻": "virevorreur.png",
-            "Pomdorochi🐲🌱": "pomdorochi.png",
-            "Sylveroy🧠🌱": "sylveroy.png",
-            "Amovénus🦋🪶": "amovenus.png",
-            "Pondralugon🔩🐲": "pondralugon.png",
-            "Saquedeneu🌱": "saquedeneu.png",
-            "Chartor🔥": "chartor.png",
-            "Pierroteknik🔥👻": "pierroteknik.png",
-            "Mite-de-Fer🔥🫐": "mitedefer.png",
-            "Balbalèze❄️": "balbaleze.png",
-            "Ire-Foudre⚡": "irefoudre.png",
-            "Békaglaçon❄️": "bekaglacon.png",
-            "Péchaminus🫐👻": "pechaminus.png",
-            "Tomberro👻": "tomberro.png",
-            "FerDeTer🔩": "ferdeter.png",
-            "Hydragla💧": "hydragla.png",
-            "Tutétékri🟫👻": "tutetekri.png",
+            "Scovillain 🔥🌱  ": "scovillain.png",
+            "Sorbouboul ❄️  ": "sorbouboul.png",
+            "Kravarech 🐲💧  ": "kravarech.png",
+            "Farigiraf 🧠🔘  ": "farigiraf.png",
+            "Pelage-Sablé 🟫⚡  ": "pelagesable.png",
+            "Galvagon 🐲⚡": "galvagon.png",
+            "Virevorreur 🌱👻  ": "virevorreur.png",
+            "Pomdorochi 🐲🌱  ": "pomdorochi.png",
+            "Sylveroy 🧠🌱  ": "sylveroy.png",
+            "Amovénus 🦋🪶  ": "amovenus.png",
+            "Pondralugon 🔩🐲  ": "pondralugon.png",
+            "Saquedeneu 🌱  ": "saquedeneu.png",
+            "Chartor 🔥  ": "chartor.png",
+            "Pierroteknik 🔥👻  ": "pierroteknik.png",
+            "Mite-de-Fer 🔥🫐  ": "mitedefer.png",
+            "Balbalèze ❄️  ": "balbaleze.png",
+            "Ire-Foudre ⚡  ": "irefoudre.png",
+            "Békaglaçon ❄️  ": "bekaglacon.png",
+            "Péchaminus 🫐👻  ": "pechaminus.png",
+            "Tomberro 👻  ": "tomberro.png",
+            "FerDeTer 🔩  ": "ferdeter.png",
+            "Hydragla 💧  ": "hydragla.png",
+            "Tutétékri 🟫👻  ": "tutetekri.png",
         }
 
         self.canvas = tk.Frame(self.root, bg="black")
@@ -466,7 +468,6 @@ class Battle:
                     else:
                         self.objets[int(objet_util)-1].use()
                         return
-                
 
 
             elif action == '3': 
@@ -508,7 +509,6 @@ class Battle:
 
         self.root.after(100, self.boucle_de_jeu)
         self.root.mainloop()
-
     def boucle_de_jeu(self):
         # Vérif défaite
         if (self.equipe == [] and self.poke_front is None) or (self.poke_front and self.poke_front.pv <= 0):
@@ -617,7 +617,7 @@ EspritFrappeur=Attaque("Esprit Frappeur👻","Spectre",None,None,None,110,0,100,
 
 
 Scovillain = Pokemon(
-"Scovillain🔥🌱  ",
+"Scovillain 🔥🌱  ",
 ("Feu","Plante"),
 65,
 75,
@@ -636,7 +636,7 @@ Scovillain = Pokemon(
 
 
 Sorbouboul = Pokemon(
-"Sorbouboul❄️  ",
+"Sorbouboul ❄️  ",
 ("Glace",),
 71,
 79,
@@ -1040,4 +1040,4 @@ while running==True :
             running=False
     else:
         print("Bien essayé")
-        
+
