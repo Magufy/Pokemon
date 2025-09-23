@@ -88,7 +88,7 @@ class Battle:
         self.label_img_bot.grid(row=1, column=2, padx=30, pady=10)
         
 
-    def update_gui(self):
+    def update_gui(self) -> None:
         if self.poke_front:
             self.label_poke_joueur.config(text=f"{self.poke_front.nom}\nPV: {self.poke_front.pv}")
             if self.images.get(self.poke_front.nom):
@@ -101,7 +101,7 @@ class Battle:
                 self.label_img_bot.image = self.images[self.robot.poke_front_bot.nom]
         self.root.update_idletasks()
 
-    def cree_equipe(self,pokemons_dispo):
+    def cree_equipe(self,pokemons_dispo)-> None:
         while len(self.equipe)<6:
             for i, poke in enumerate(pokemons_dispo, start=1):
                 print(f"{i}) {poke.nom}")
@@ -113,7 +113,7 @@ class Battle:
             else:
                 print('pokemon non disponible')
             
-    def choix_pokemon(self):
+    def choix_pokemon(self)-> None:
         while self.poke_front==None:
             poke=int(input(
                 f"choisissez un pokemon a envoyer au combat{[i.nom for i in self.equipe]}"))
@@ -121,7 +121,7 @@ class Battle:
                 self.poke_front=self.equipe[poke-1]
                 self.equipe.remove(self.equipe[poke-1])
 
-    def mort_poke_front(self):
+    def mort_poke_front(self)-> None:
         if self.poke_front.pv<=0 : 
             if self.equipe==[]:
                 print("\033[1;31m Vous avez perdu (la honte)\033[0m")
@@ -129,7 +129,7 @@ class Battle:
                 return
             self.poke_front=None
             self.choix_pokemon()
-    def executer_attaque(self, attaquant, defenseur, attaque):
+    def executer_attaque(self, attaquant, defenseur, attaque)-> None:
         self.update_gui()
         self.root.update()
         couleur=None
@@ -172,7 +172,7 @@ class Battle:
         self.update_gui()
         self.root.update()
             
-    def tour(self):
+    def tour(self)-> None:
         """
         1 tour du joueur et du bot
         """
@@ -256,9 +256,6 @@ class Battle:
                 print("Entrez un chiffre entre 1 et 4")
                 action=None
 
-            
-            
-        #Tour du bot :
 
         if self.robot.poke_front_bot.pv <= 20:
             tour_bot = random.choice(["Change", "Objet"])
@@ -309,7 +306,7 @@ class Battle:
                 self.executer_attaque(self.poke_front, self.robot.poke_front_bot, attaque_joueur)
             
 
-    def main(self):
+    def main(self)-> None:
         Injection5G = Objet("Injection5G", self.equipe,self.robot.equipe_bot,self.poke_front,self.robot.poke_front_bot,3,"Joueur")
         Glock = Objet("Glock", self.equipe,self.robot.equipe_bot,self.poke_front,self.robot.poke_front_bot,1,"Joueur")
         RouletteRusse = Objet("Roulette Russe", self.equipe,self.robot.equipe_bot,self.poke_front,self.robot.poke_front_bot,5,"Joueur")
@@ -333,7 +330,7 @@ class Battle:
         self.root.after(100, self.boucle_de_jeu())
         self.root.mainloop()
 
-    def boucle_de_jeu(self):
+    def boucle_de_jeu(self)-> None:
         if self.run == True:
             if self.robot.poke_front_bot is None or self.robot.poke_front_bot.pv <= 0:
                 if self.robot.poke_front_bot:  
@@ -364,5 +361,6 @@ class Battle:
         self.root.update()
 
         self.root.after(100, self.boucle_de_jeu)
+
 
 
