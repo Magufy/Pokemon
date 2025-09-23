@@ -489,3 +489,20 @@ Tutétékri=Pokemon(
     105,
     [Malediction,Ultralaser,PsykoudBoul,EspritFrappeur]
 )
+
+Francois=Pokemon(
+    "Francois 🔘  ",
+    ("Normal",),
+    100,
+    100,
+    (),
+    ("Sol","Plante","Feu","Combat","Glace","Electrique","Psy","Fée","Acier","Dragon","Insecte","Poison","Roche","Spectre","Ténèbres","Vol",),
+    (),
+    (),
+    ("Eau",),
+    10,
+    10,
+    10,
+    10,
+    [Armure,MurLumiere,Machination,AppelALaGreve]
+)
