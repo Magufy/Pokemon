@@ -11,7 +11,9 @@ class Bot:
         self.equipe_bot.remove(self.poke_front_bot)
 
     def choix_pokemon_bot(self)-> None:
-
+        if self.equipe_bot==[]:
+            print("Bravo")
+            return
         poke_front_avant=self.poke_front_bot
 
         self.poke_front_bot = self.equipe_bot[0]
@@ -21,4 +23,5 @@ class Bot:
             self.equipe_bot.append(poke_front_avant)
         
         print(f"Le bot rappelle {poke_front_avant.nom}et fait entrer {self.poke_front_bot.nom}")
+
 
