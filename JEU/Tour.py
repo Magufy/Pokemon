@@ -11,7 +11,7 @@ from degats import Degats
 import pygame
 
 class Battle:
-    def __init__(self,pokemons_dispo:list):
+    def __init__(self,pokemons_dispo:list)-> None:
         self.equipe=[]
         self.poke_front=None
         self.robot= Bot(pokemons_dispo)
@@ -361,6 +361,7 @@ class Battle:
         self.root.update()
 
         self.root.after(100, self.boucle_de_jeu)
+
 
 
 
