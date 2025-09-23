@@ -37,6 +37,7 @@ Gravite = Attaque("Gravite🧠","Psy", "Statut", True, False, 0, 100, 100, False
 Elecanon = Attaque("Elecanon⚡","Electrique", None, True, False, 120, 100, 50, False)
 Telluriforce = Attaque("Telluriforce🟫","Sol", None, True, False, 90, 100, 100, False)
 MagnetControle = Attaque("MagnetControle⚡","Electrique", None, True, False, 0, 100, 100, False,buff="defense+defspe")
+
 CavalerieLourde = Attaque("Cavalerie Lourde🐲","Dragon", None, False, False, 90, 100, 100, False)
 EclairFou = Attaque("Éclair Fou⚡","Electrique", None, True, False, 80, 100, 100, False)
 Colere = Attaque("Colère🐲","Dragon", None, False, False, 120, 100, 100, False)
@@ -56,8 +57,8 @@ CriDraconique = Attaque("Cri Draconique🐲","Dragon", None, True, False, 80, 10
 TempeteVerte = Attaque("Tempête Verte🌱","Plante", None, True, False, 90, 100, 100, False)
 PsykoudBoul = Attaque("Psykoud'Boul🧠","Psy", None, False, False, 80, 100, 100, False)
 Interversion = Attaque("Interversion🧠","Psy", None, False, False, 0, 100, 100, False)
-ForceAjoutee = Attaque("Force Ajoutée🌱","Plante", None, False, False, 80, 100, 100, False)
 
+ForceAjoutee = Attaque("Force Ajoutée🌱","Plante", None, False, False, 80, 100, 100, False)
 Calinerie = Attaque("Câlinerie🦋","Fée", None, True, False, 70, 100, 100, False)
 ExploBrume = Attaque("Explo-Brume🦋","Fée", None, True, False, 90, 100, 100, False)
 VoixEnjoleuse = Attaque("Voix Enjôleuse🦋","Fée", None, True, False, 80, 100, 100, False)
@@ -95,5 +96,5 @@ Eboulement = Attaque("Eboulement🟫","Roche","Paralysie", False, False, 75, 100
 PistoletAO = Attaque("Pistolet à O💧","Eau", None, False, False, 40, 100, 100, False)
 
 EspritFrappeur=Attaque("Esprit Frappeur👻","Spectre",None,None,None,110,0,100,False)
-
+AppelALaGreve=Attaque("Appel à la Grève🔘","Normal",None,None,None,10,0,10,False)
 
