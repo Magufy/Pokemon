@@ -506,4 +506,5 @@ Francois=Pokemon(
     10,
     [Armure,MurLumiere,Machination,AppelALaGreve]
 )
+#c'est lui qu'a voulu
 
