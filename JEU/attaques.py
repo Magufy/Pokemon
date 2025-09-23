@@ -96,5 +96,5 @@ Eboulement = Attaque("Eboulement🟫","Roche","Paralysie", False, False, 75, 100
 PistoletAO = Attaque("Pistolet à O💧","Eau", None, False, False, 40, 100, 100, False)
 
 EspritFrappeur=Attaque("Esprit Frappeur👻","Spectre",None,None,None,110,0,100,False)
-AppelALaGreve=Attaque("Appel à la Grève🔘","Normal",None,None,None,10,0,10,False)
+AppelALaGreve=Attaque("Appel à la Grève🔘","Normal",None,True,None,10,0,10,False)
 
