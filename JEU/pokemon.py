@@ -31,7 +31,7 @@ class Pokemon():
                 f"Attaque Spéciale: {self.attspe} | Défense Spéciale: {self.defspe}\n"
                 f"Compétences: {', '.join([c.nom for c in self.comp])}")
 
-    def apply_statut(self):
+    def apply_statut(self)-> None:
         if "Poison" in self.statut:
             self.pv -= max(1, self.pv // 8)
             print(f"{self.nom} subit des dégâts de Poison ! PV restant : {self.pv}")
@@ -506,3 +506,4 @@ Francois=Pokemon(
     10,
     [Armure,MurLumiere,Machination,AppelALaGreve]
 )
+
