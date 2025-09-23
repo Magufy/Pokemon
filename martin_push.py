@@ -493,9 +493,11 @@ class Battle:
 
     
         if tour_bot=="Change":
+            attaque_bot=None
             self.robot.choix_pokemon_bot()
 
         elif tour_bot=="Objet":
+            attaque_bot=None
             objet_util=None
             while objet_util==None:
                 objet_util=random.choice(self.objets_bot)
@@ -513,13 +515,11 @@ class Battle:
                 attaque_bot = random.choice(self.robot.poke_front_bot.comp)
             else:
                 attaque_bot=None
-        else:
-            attaque_bot=None
 
         #Si l'un n'attaque pas
-        if attaque_joueur==None:
+        if attaque_joueur==None and attaque_bot!=None:
             self.executer_attaque(self.robot.poke_front_bot, self.poke_front, attaque_bot)
-        elif attaque_bot==None:
+        elif attaque_bot==None and attaque_joueur!=None:
             self.executer_attaque(self.poke_front, self.robot.poke_front_bot, attaque_joueur)
 
         elif self.poke_front.vitesse >= (self.robot.poke_front_bot.vitesse if self.robot.poke_front_bot else 0):
