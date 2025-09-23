@@ -1,7 +1,10 @@
 import random
 from random import choice
 import copy
-
+import tkinter as tk
+from tkinter import Label
+from tkinter import PhotoImage
+import os
 
 class Pokemon():
     def __init__(self,nom,type,pv,vitesse,res,res2,faib,faib2,immu,attaque,defense,attspe,defspe,comp):
@@ -257,6 +260,82 @@ class Battle:
         self.robot= Bot(pokemons_dispo)
         self.run=True
 
+
+        # dictionnaire de correspondance nom → fichier
+        noms_fichiers = {
+            "Scovillain🔥🌱": "scovillain.png",
+            "Sorbouboul❄️": "sorbouboul.png",
+            "Kravarech🐲💧": "kravarech.png",
+            "Farigiraf🧠🔘": "farigiraf.png",
+            "Pelage-Sablé🟫⚡": "pelagesable.png",
+            "Galvagon🐲⚡": "galvagon.png",
+            "Virevorreur🌱👻": "virevorreur.png",
+            "Pomdorochi🐲🌱": "pomdorochi.png",
+            "Sylveroy🧠🌱": "sylveroy.png",
+            "Amovénus🦋🪶": "amovenus.png",
+            "Pondralugon🔩🐲": "pondralugon.png",
+            "Saquedeneu🌱": "saquedeneu.png",
+            "Chartor🔥": "chartor.png",
+            "Pierroteknik🔥👻": "pierroteknik.png",
+            "Mite-de-Fer🔥🫐": "mitedefer.png",
+            "Balbalèze❄️": "balbaleze.png",
+            "Ire-Foudre⚡": "irefoudre.png",
+            "Békaglaçon❄️": "bekaglacon.png",
+            "Péchaminus🫐👻": "pechaminus.png",
+            "Tomberro👻": "tomberro.png",
+            "FerDeTer🔩": "ferdeter.png",
+            "Hydragla💧": "hydragla.png",
+            "Tutétékri🟫👻": "tutetekri.png",
+        }
+
+        self.canvas = tk.Frame(self.root, bg="black")
+        self.canvas.pack(fill="both", expand=True)
+
+        self.images = {}
+        dossier_images = "C:\\JEU\\images_pokemon"
+
+        # Chargement dynamique des images
+        for poke in pokemons_dispo:
+            fichier = noms_fichiers.get(poke.nom)
+            if fichier:
+                try:
+                    chemin = os.path.join(dossier_images, fichier)
+                    self.images[poke.nom] = PhotoImage(file=chemin)
+                    print(f"Image {poke.nom} chargée :", chemin)
+                except Exception as e:
+                    print(f"Erreur chargement image {poke.nom} :", e)
+                    self.images[poke.nom] = None
+            else:
+                self.images[poke.nom] = None
+
+        # Labels pour afficher les Pokémon
+        self.label_poke_joueur = Label(self.canvas, text="", font=("Arial", 14), fg="green", bg="black")
+        self.label_vs = Label(self.canvas, text=" VS ", font=("Arial", 20, "bold"), fg="red", bg="black")
+        self.label_poke_bot = Label(self.canvas, text="", font=("Arial", 14), fg="blue", bg="black")
+
+        self.label_poke_joueur.grid(row=0, column=0, padx=30, pady=20)
+        self.label_vs.grid(row=0, column=1, padx=30, pady=20)
+        self.label_poke_bot.grid(row=0, column=2, padx=30, pady=20)
+
+        self.label_img_joueur = Label(self.canvas, bg="black")
+        self.label_img_joueur.grid(row=1, column=0, padx=30, pady=10)
+
+        self.label_img_bot = Label(self.canvas, bg="black")
+        self.label_img_bot.grid(row=1, column=2, padx=30, pady=10)
+        
+
+    def update_gui(self):
+        if self.poke_front:
+            self.label_poke_joueur.config(text=f"{self.poke_front.nom}\nPV: {self.poke_front.pv}")
+            if self.images.get(self.poke_front.nom):
+                self.label_img_joueur.config(image=self.images[self.poke_front.nom])
+                self.label_img_joueur.image = self.images[self.poke_front.nom]  # obligatoire pour Tkinter
+        if self.robot.poke_front_bot:
+            self.label_poke_bot.config(text=f"{self.robot.poke_front_bot.nom}\nPV: {self.robot.poke_front_bot.pv}")
+            if self.images.get(self.robot.poke_front_bot.nom):
+                self.label_img_bot.config(image=self.images[self.robot.poke_front_bot.nom])
+                self.label_img_bot.image = self.images[self.robot.poke_front_bot.nom]
+        self.root.update_idletasks()
     def cree_equipe(self,pokemons_dispo):
         while len(self.equipe)<6:
             for i, poke in enumerate(pokemons_dispo, start=1):
@@ -311,7 +390,7 @@ class Battle:
             if deg != 0:   
                 defenseur.pv -= deg
                 print(f"{attaquant.nom} utilise {attaque.nom} ! Dégâts infligés : {deg}")
-
+            self.update_gui()
 
     def tour(self):
         self.mort_poke_front()
@@ -426,16 +505,28 @@ class Battle:
         ReposLong = Objet("Repos Long", self.equipe,self.robot.equipe_bot,self.poke_front,self.robot.poke_front_bot,4)
         self.objets = [Injection5G,Glock,RouletteRusse,GamblingTime,ProduitsDopants,Eau,CalmantsPourOurs,ReposLong]
 
-        while self.run:
-            if (self.equipe == [] and self.poke_front is None) or (self.poke_front and self.poke_front.pv <= 0):
-                print("Vous avez perdu (la honte)")
-                return
 
-            if (self.robot.equipe_bot == [] and self.robot.poke_front_bot is None) or (self.robot.poke_front_bot and self.robot.poke_front_bot.pv <= 0):
-                print("Bravo, vous avez gagné (heureusement, c'est un bot)")
-                return
+        self.root.after(100, self.boucle_de_jeu)
+        self.root.mainloop()
 
-            self.tour()
+    def boucle_de_jeu(self):
+        # Vérif défaite
+        if (self.equipe == [] and self.poke_front is None) or (self.poke_front and self.poke_front.pv <= 0):
+            print("Vous avez perdu (la honte)")
+            self.root.quit()
+            return
+
+        # Vérif victoire
+        if (self.robot.equipe_bot == [] and self.robot.poke_front_bot is None) or (self.robot.poke_front_bot and self.robot.poke_front_bot.pv <= 0):
+            print("Bravo, vous avez gagné (heureusement, c'est un bot)")
+            self.root.quit()
+            return
+
+        # sinon : jouer un tour
+        self.tour()
+
+        # replanifier la suite
+        self.root.after(100, self.boucle_de_jeu)
 
 
 # ajouter : proba,precision,prio,PP
@@ -525,8 +616,8 @@ PistoletAO = Attaque("Pistolet à O💧","Eau", None, False, False, 40, 100, 100
 EspritFrappeur=Attaque("Esprit Frappeur👻","Spectre",None,None,None,110,0,100,False,10)
 
 
-Scorvilain = Pokemon(
-"Scovilain🔥🌱  ",
+Scovillain = Pokemon(
+"Scovillain🔥🌱  ",
 ("Feu","Plante"),
 65,
 75,
@@ -934,7 +1025,7 @@ while running==True :
 
     if choix=='1' :
         pokemons_dispo = [
-        Scorvilain, Sorbouboul, Kravarech, Farigiraf, PelageSablé,
+        Scovillain, Sorbouboul, Kravarech, Farigiraf, PelageSablé,
         Galvagon, Virevorreur, Pomdorochi, Sylveroy,
         Amovenus, Pondralugon, Saquedeneu, Chartor, Pierroteknik, MiteDeFer,
         Hydragla,Ferdeter,Tomberro ,Pechaminus ,Bekaglacon ,IreFoudre ,Balbaleze ,Tutétékri
