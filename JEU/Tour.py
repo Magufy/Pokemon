@@ -193,10 +193,10 @@ class Battle:
                 choix=None
                 while choix==None:
                     choix = input(f"Choisissez une attaque : "
-                                    f"1) {self.poke_front.comp[0].nom} | "
-                                    f"2) {self.poke_front.comp[1].nom} | "
-                                    f"3) {self.poke_front.comp[2].nom} | "
-                                    f"4) {self.poke_front.comp[3].nom} : ")
+                                    f" 1) {self.poke_front.comp[0].nom} | "
+                                    f" 2) {self.poke_front.comp[1].nom} | "
+                                    f" 3) {self.poke_front.comp[2].nom} | "
+                                    f" 4) {self.poke_front.comp[3].nom} : ")
                     if choix not in (str(a)for a in range(1,len(self.poke_front.comp)+1)):
                         choix=None
                         print("Entrez un chiffre entre 1 et 4")
@@ -214,7 +214,7 @@ class Battle:
                                   5) {self.objets[4].nom} : {self.objets[4].nombre}
                                   6) {self.objets[5].nom} : {self.objets[5].nombre}
                                   7) {self.objets[6].nom} : {self.objets[6].nombre}
-                                  8) {self.objets[7].nom} : {self.objets[7].nombre} """)
+                                  8) {self.objets[7].nom} : {self.objets[7].nombre}""")
                     
                     if objet_util not in (str(a)for a in range(1,len(self.objets)+1)):
                         objet_util=None
@@ -222,9 +222,9 @@ class Battle:
 
                     else:
                         self.objets[int(objet_util)-1].use()
+                        print(f"\033[1;32 Vous utilisez l'objet {self.objets[int(objet_util)-1].nom}\033[0m")
   
                 
-
 
             elif action == '3': 
                 if self.equipe==[]:
@@ -232,7 +232,7 @@ class Battle:
                 else:
                     poke_change=None
                     while poke_change==None:
-                        poke_change = input(f"Choisissez un Pokémon : {[i.nom for i in self.equipe]} : ")
+                        poke_change = input(f"\033[1;32 Choisissez un Pokémon : {[i.nom for i in self.equipe]} : \033[0m")
 
                         if poke_change not in (str(i) for i in range(1,len(self.equipe)+1) ) :
                             print(f"Entrez un chiffre entre 1 et {len(self.equipe)}")
@@ -241,11 +241,11 @@ class Battle:
                             self.equipe.append(self.poke_front)
                             self.poke_front = self.equipe[int(poke_change)-1]
                             self.equipe.remove(self.poke_front)
-                            print(f"Vous envoyez {self.poke_front.nom} !")
+                            print(f"\033[1;32 Vous envoyez {self.poke_front.nom} !\033[0m")
    
 
             elif action == '4': 
-                print("Vous abandonnez...")
+                print("\033[1;32 Vous abandonnez...\033[0m")
                 self.run=False
 
         
