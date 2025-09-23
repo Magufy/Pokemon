@@ -11,7 +11,7 @@ from degats import Degats
 import pygame
 
 class Battle:
-    def __init__(self,pokemons_dispo):
+    def __init__(self,pokemons_dispo:list):
         self.equipe=[]
         self.poke_front=None
         self.robot= Bot(pokemons_dispo)
@@ -101,7 +101,7 @@ class Battle:
                 self.label_img_bot.image = self.images[self.robot.poke_front_bot.nom]
         self.root.update_idletasks()
 
-    def cree_equipe(self,pokemons_dispo)-> None:
+    def cree_equipe(self,pokemons_dispo:list)-> None:
         while len(self.equipe)<6:
             for i, poke in enumerate(pokemons_dispo, start=1):
                 print(f"{i}) {poke.nom}")
@@ -361,6 +361,7 @@ class Battle:
         self.root.update()
 
         self.root.after(100, self.boucle_de_jeu)
+
 
 
 
