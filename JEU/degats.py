@@ -9,6 +9,9 @@ class Degats:
         self.terrain=None
 
     def degats(self):#rajouter les priorités
+        """
+        calcul des degats infligés
+        """
         vitesse=self.poke_att.vitesse
         if "Paralysie" in self.poke_att.statut:  
             vitesse = vitesse / 4 
@@ -75,6 +78,7 @@ class Degats:
                 self.poke_att.buffs.append(self.attaque.buff)
 
         return int(Degats)
+
 
 
 
