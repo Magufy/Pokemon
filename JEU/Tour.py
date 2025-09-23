@@ -173,6 +173,9 @@ class Battle:
         self.root.update()
             
     def tour(self):
+        """
+        1 tour du joueur et du bot
+        """
         self.mort_poke_front()
         attaque_joueur=None
         attaque_bot=None
@@ -361,4 +364,5 @@ class Battle:
         self.root.update()
 
         self.root.after(100, self.boucle_de_jeu)
+
 
