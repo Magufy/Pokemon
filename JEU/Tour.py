@@ -50,6 +50,7 @@ class Battle:
             "FerDeTer 🔩  ": "ferdeter.png",
             "Hydragla 💧  ": "hydragla.png",
             "Tutétékri 🟫👻  ": "tutetekri.png",
+            "Francois 🔘  ": "bouvier.png",
         }
 
         self.canvas = tk.Frame(self.root, bg="black")
@@ -65,7 +66,6 @@ class Battle:
                 try:
                     chemin = os.path.join(dossier_images, fichier)
                     self.images[poke.nom] = PhotoImage(file=chemin)
-                    print(f"Image {poke.nom} chargée :", chemin)
                 except Exception as e:
                     print(f"Erreur chargement image {poke.nom} :", e)
                     self.images[poke.nom] = None
@@ -361,6 +361,7 @@ class Battle:
         self.root.update()
 
         self.root.after(100, self.boucle_de_jeu)
+
 
 
 
