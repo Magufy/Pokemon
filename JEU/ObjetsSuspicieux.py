@@ -15,7 +15,7 @@ class Objet:
             self.op="le pokemon du bot"
             self.side="votre pokemon"
 
-    def use(self):
+    def use(self)-> None:
         if self.nom not in ("Injection5G", "Glock", "Roulette Russe", "Gambling Time", "Produits Dopants", "Eau", "Calmants Pour Ours", "Repos Long"):
             return
         if self.nombre < 1:
@@ -61,6 +61,7 @@ class Objet:
                 if "Comptine" not in self.poke.statut:
                     self.poke.statut.append("Comptine")
                 print(f"Mimimimimimimimimi ({self.side} dort et recuperez 10PP et 20pv et vous avez {self.poke.pv}pv)")
+
 
 
 
