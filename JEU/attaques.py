@@ -1,5 +1,5 @@
 class Attaque():
-    def __init__(self,nom,type,statut,special,haut_crit,puissance,proba,precision,prio,buff=None):
+    def __init__(self,nom:str,type:str,statut,special:bool,haut_crit:bool,puissance:int,proba:int,precision:int,prio:bool,buff=None)-> None:
         self.nom=nom
         self.type=type
         self.statut=statut
@@ -97,4 +97,5 @@ PistoletAO = Attaque("Pistolet à O💧","Eau", None, False, False, 40, 100, 100
 
 EspritFrappeur=Attaque("Esprit Frappeur👻","Spectre",None,None,None,110,0,100,False)
 AppelALaGreve=Attaque("Appel à la Grève🔘","Normal",None,True,None,10,0,10,False)
+
 
