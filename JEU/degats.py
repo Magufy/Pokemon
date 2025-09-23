@@ -8,7 +8,7 @@ class Degats:
         self.attaque=attaque
         self.terrain=None
 
-    def degats(self):#rajouter les priorités
+    def degats(self)-> int:#rajouter les priorités
         """
         calcul des degats infligés
         """
@@ -78,6 +78,7 @@ class Degats:
                 self.poke_att.buffs.append(self.attaque.buff)
 
         return int(Degats)
+
 
 
 
